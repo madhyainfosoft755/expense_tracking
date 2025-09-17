@@ -1,0 +1,50 @@
+<p-table [value]="users?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false" [rows]="5" [totalRecords]="20"
+(onPage)="pageChange($event)">
+    <ng-template pTemplate="header">
+        <tr>
+        <th style="width:45px">SN</th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Employee Id</th>
+        <th>Is Active</th>
+        <th>Created At</th>
+        <th *ngIf="action">Action</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+        <tr>
+        <td>{{ rowIndex+1 }}</td>
+        <td>
+            {{ user.first_name }} {{ user.last_name }}
+        </td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+            {{ user.mobile_number }}
+        </td>
+        <td>
+            {{ user.employee_id }}
+        </td>
+        <td>
+            <p-tag *ngIf="user.is_active" severity="success" value="Active" />
+            <p-tag *ngIf="!user.is_active" severity="danger" value="Blocked" />
+        </td>
+        <td>{{ user.date_joined | date:'dd-MM-yyyy' }}</td>
+        <td *ngIf="action">
+            <p-button (click)="showUserManageModal(user)" icon="pi pi-pen-to-square" severity="info" />
+        </td>
+        </tr>
+    </ng-template>
+</p-table>
+<div class="mt-2 flex justify-end items-center" *ngIf="users?.data?.length > 0 && paginationText">
+    <div class="mr-2"> 
+    {{ paginationText }}
+    </div>
+    <p-buttongroup>
+    <p-button type="button" label="Prev" icon="pi pi-chevron-left" (onClick)="prev()" [disabled]="isFirstPage()" outlined />
+    <!-- <p-button type="button" icon="pi pi-refresh" (click)="reset()" text /> -->
+    <p-button type="button" label="Next" icon="pi pi-chevron-right" (onClick)="next()" [disabled]="isLastPage()" outlined iconPos="right" />
+    </p-buttongroup>
+</div>

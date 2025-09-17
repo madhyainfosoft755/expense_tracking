@@ -1,0 +1,32 @@
+<div class="col-span-12">
+    <div class="col-span-12">
+        <p-multiselect [options]="months" [(ngModel)]="selectedMonthCashBook" optionValue="number" optionLabel="month" placeholder="Select Month" [maxSelectedLabels]="3" (onChange)="onMonthChange($event.value)" />
+        <p-select [options]="years" [(ngModel)]="currentYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)"/>
+        <p-multiselect [options]="office_locations" *ngIf="office_locations.length > 0" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" [maxSelectedLabels]="3" (onChange)="onOfficeLocationChange($event.value)"  />
+        <p-button label="Filter" severity="info" (click)="filterApplyed()" />
+    </div>
+    <p-table [value]="expenseSummaryData" showGridlines stripedRows size="small" [loading]="loadingED" [scrollable]="true" scrollHeight="350px">
+        <ng-template pTemplate="header">
+        <tr>
+            <th style="width:45px">SN</th>
+            <th *ngIf="userRole === 'SUPERADMIN'">Site</th>
+            <th>User</th>
+            <th>Total</th>
+            <th>Approved</th>
+            <th>Pending</th>
+            <th>Rejected</th>
+        </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-eh let-rowIndex="rowIndex">
+        <tr>
+            <td>{{ rowIndex+1 }}</td>
+            <td *ngIf="userRole === 'SUPERADMIN'">{{ eh.office_location }}</td>
+            <td>{{ eh.user_name }}</td>
+            <td>{{ eh.total }}</td>
+            <td>{{ eh.approved }}</td>
+            <td>{{ eh.pending }}</td>
+            <td>{{ eh.rejected }}</td>
+        </tr>
+        </ng-template>
+    </p-table>
+</div>

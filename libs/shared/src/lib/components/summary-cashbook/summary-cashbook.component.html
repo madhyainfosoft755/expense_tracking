@@ -1,0 +1,49 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div class="col-span-12 mb-2">
+        <!-- <p-multiselect [options]="statusOptions" [(ngModel)]="selectedStatus" optionValue="value" optionLabel="label" placeholder="Select Status" [maxSelectedLabels]="3" (onChange)="onStatusChange($event.value)" class="mr-2" /> -->
+        <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" optionValue="value" optionLabel="label" placeholder="Select Status" (onChange)="onStatusChange($event.value)" class="mr-2" />
+        <!-- <p-select [options]="years" [(ngModel)]="currentYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)" class="mr-2" /> -->
+        <!-- <p-multiselect [options]="sites" *ngIf="sites.length > 0 && userRole === 'SUPERADMIN'" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" [maxSelectedLabels]="3" (onChange)="onOfficeLocationChange($event.value)"  class="mr-2" /> -->
+        <p-select [options]="sites" *ngIf="sites.length > 0 && userRole === 'SUPERADMIN'" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" (onChange)="onOfficeLocationChange($event.value)"  class="mr-2" />
+        <p-button
+            [icon]="'pi pi-file-excel'"   
+            [severity]="'success'" 
+            (onClick)="exportToCSV()" class="mr-2"/>
+    </div>
+    <div class="col-span-12">
+
+        <p-table [value]="data" [loading]="loading" [paginator]="false">
+            <ng-template pTemplate="header">
+                <tr>
+                <th>SN</th>
+                <th>Expense Head</th>
+                <th *ngFor="let month of months">{{ month }}</th>
+                <th>Total</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-i="rowIndex">
+                <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ row.name }}</td>
+                <td *ngFor="let month of months">
+                    {{ row.total[month] || '' }}
+                </td>
+                <td>{{ row.total.GrandTotal }}</td>
+                </tr>
+            </ng-template>
+
+            <!-- <ng-template pTemplate="footer">
+                <tr>
+                <td colspan="2"><b>Total</b></td>
+                <td *ngFor="let month of months">
+                    <b>{{ getColumnTotal(month) }}</b>
+                </td>
+                <td><b>{{ getGrandTotal() }}</b></td>
+                </tr>
+            </ng-template> -->
+        </p-table>
+
+    </div>
+</div>

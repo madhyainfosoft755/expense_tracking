@@ -1,0 +1,102 @@
+<div class="grid grid-cols-1 gap-6">
+    <form [formGroup]="userFilterForm" (ngSubmit)="onSubmitFilter()" class="flex flex-col gap-2">
+
+        <!-- Username -->
+        <div class="flex flex-col">
+            <label for="username" class="mb-1">Username</label>
+            <input
+            id="username"
+            type="text"
+            pInputText
+            formControlName="username"
+            maxlength="255"
+            />
+            <!-- <small class="text-red-500" *ngIf="userFilterForm.get('username')?.touched && userFilterForm.get('username')?.invalid">
+            Username is required (max 6 chars).
+            </small> -->
+        </div>
+
+        <!-- Name -->
+        <div class="flex flex-col">
+            <label for="name" class="mb-1">Name</label>
+            <input
+            id="name"
+            type="text"
+            pInputText
+            maxlength="255"
+            formControlName="name"
+            />
+            <!-- <small class="text-red-500" *ngIf="userFilterForm.get('name')?.touched && userFilterForm.get('name')?.invalid">
+            Name is required (max 255 chars).
+            </small> -->
+        </div>
+
+        <!-- Email -->
+        <div class="flex flex-col">
+            <label for="email" class="mb-1">Email</label>
+            <input
+            id="email"
+            type="text"
+            pInputText
+            maxlength="255"
+            formControlName="email"
+            />
+            <!-- <small class="text-red-500" *ngIf="userFilterForm.get('email')?.touched && userFilterForm.get('email')?.invalid">
+            Email is Required (max 255 chars).
+            </small> -->
+        </div>
+
+        <!-- Mobile -->
+        <div class="flex flex-col">
+            <label for="mobile_number" class="mb-1">Mobile</label>
+            <input
+            id="mobile_number"
+            type="text"
+            pInputText
+            maxlength="10"
+            formControlName="mobile_number"
+            />
+            <!-- <small class="text-red-500" *ngIf="userFilterForm.get('mobile_number')?.touched && userFilterForm.get('mobile_number')?.invalid">
+            Mobile is Required (max 255 chars).
+            </small> -->
+        </div>
+
+        <!-- Employee Id -->
+        <div class="flex flex-col">
+            <label for="employee_id" class="mb-1">Employee Id</label>
+            <input
+            id="employee_id"
+            type="text"
+            pInputText
+            maxlength="255"
+            formControlName="employee_id"
+            />
+            <!-- <small class="text-red-500" *ngIf="userFilterForm.get('employee_id')?.touched && userFilterForm.get('employee_id')?.invalid">
+            Employee Id is Required (max 255 chars).
+            </small> -->
+        </div>
+
+        <!-- Status Dropdown -->
+        <div class="flex flex-col">
+            <label for="is_active" class="mb-1">Status</label>
+            <p-select
+            id="is_active"
+            formControlName="is_active"
+            [options]="statusOpt"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select Status"
+            class="w-full"
+            ></p-select>
+            <!-- <small class="text-red-500" *ngIf="userFilterForm.get('is_active')?.touched && userFilterForm.get('is_active')?.invalid">
+            Status is required.
+            </small> -->
+        </div>
+
+        <div class="flex justify-between mt-4">
+            <p-button label="Clear" [outlined]="true" (onClick)="clearAdvanceFilter()" />
+            <button [loading]="loadingAdvanceFilter" [disabled]="loadingAdvanceFilter || !enableAdvSearch" pButton type="submit" label="Submit" ></button>
+        </div>
+    </form>
+
+</div>

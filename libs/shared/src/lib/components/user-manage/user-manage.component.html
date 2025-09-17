@@ -1,0 +1,130 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="p-fluid" *ngIf="userRole !== 'USER'">
+    <div class="grid grid-cols-6 gap-6">
+
+      <!-- UserName -->
+      <div class="field col-span-6 md:col-span-3">
+        <label class="block" for="username">Username</label>
+        <input id="username" pInputText formControlName="username" placeholder="Username" class="w-full" />
+        <small *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-red-500 block">
+          Username is required and must be under 255 characters.
+        </small>
+      </div>
+  
+      <!-- First Name -->
+      <div class="field col-span-6 md:col-span-3">
+        <label class="block" for="first_name">First Name</label>
+        <input id="first_name" pInputText formControlName="first_name" placeholder="First Name" class="w-full" />
+        <small *ngIf="userForm.get('first_name')?.invalid && userForm.get('first_name')?.touched" class="text-red-500 block">
+          First name is required and must be under 255 characters.
+        </small>
+      </div>
+
+      <!-- Last Name -->
+      <div class="field col-span-6 md:col-span-3">
+        <label class="block" for="last_name">Last Name</label>
+        <input id="last_name" pInputText formControlName="last_name" placeholder="Last Name" class="w-full" />
+        <small *ngIf="userForm.get('last_name')?.invalid && userForm.get('last_name')?.touched" class="text-red-500 block">
+          Last name is required and must be under 255 characters.
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="field col-span-6 md:col-span-3">
+        <label class="block" for="email">Email</label>
+        <input id="email" pInputText formControlName="email" placeholder="Email" class="w-full" />
+        <small *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 block">
+          Email is required and must be under 255 characters.
+        </small>
+      </div>
+
+      <!-- Mobile Number -->
+      <div class="field col-span-6 md:col-span-3">
+        <label class="block" for="mobile_number">Mobile Number</label>
+        <input id="mobile_number" pInputText formControlName="mobile_number" placeholder="Mobile Number" class="w-full" />
+        <small *ngIf="userForm.get('mobile_number')?.invalid && userForm.get('mobile_number')?.touched" class="text-red-500 block">
+          Mobile number is required and must be under 10 characters.
+        </small>
+      </div>
+
+      <!-- Employee Id -->
+      <div class="field col-span-6 md:col-span-3">
+        <label class="block" for="employee_id">Employee Id</label>
+        <input id="employee_id" pInputText formControlName="employee_id" placeholder="Employee Id" class="w-full" />
+        <small *ngIf="userForm.get('employee_id')?.invalid && userForm.get('employee_id')?.touched" class="text-red-500 block">
+          Employee Id must be under 255 characters.
+        </small>
+      </div>
+
+      <!-- Password -->
+      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('password')">
+        <label class="block" for="password">Password</label>
+        <input id="password" pInputText formControlName="password" placeholder="Password" class="w-full" />
+        <small *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-red-500 block">
+          Employee Id must be under 255 characters.
+        </small>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('confirm_password')">
+        <label class="block" for="confirm_password">Confirm Password</label>
+        <input id="confirm_password" pInputText formControlName="confirm_password" placeholder="Confirm Password" class="w-full" />
+        <small *ngIf="userForm.get('confirm_password')?.invalid && userForm.get('confirm_password')?.touched" class="text-red-500 block">
+          Employee Id must be under 255 characters.
+        </small>
+        <small *ngIf="userForm.errors?.['passwordMismatch']">Passwords don't match</small>
+      </div>
+
+      
+      <!-- Site -->
+      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('site')">
+        <label class="block" for="site">Site</label>
+        <p-select appendTo="body" [options]="sitesArr" formControlName="site" optionLabel="name" optionValue="id" [filter]="true" filterBy="name" [showClear]="false" placeholder="Select Site" styleClass="w-full"  />
+        <small *ngIf="userForm.get('site')?.invalid && userForm.get('site')?.touched" class="text-red-500 block">
+          Site must be under 255 characters.
+        </small>
+      </div>
+      
+      <!-- Role -->
+      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('role')">
+        <label class="block" for="role">Role</label>
+        <p-select appendTo="body" [options]="rolesArr" (onChange)="userRoleChanged($event.value)" formControlName="role" optionLabel="label" optionValue="name" [filter]="true" filterBy="name" [showClear]="false" placeholder="Select Role" styleClass="w-full"  />
+        <small *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-red-500 block">
+          Employee Id must be under 255 characters.
+        </small>
+      </div>
+
+
+      <!-- Is Active Switch -->
+      <div class="field col-span-6 md:col-span-3 flex items-center" *ngIf="userForm.contains('is_active')">
+        <label class="mr-2" for="is-active">Active</label>
+        <p-toggleswitch id="is-active" formControlName="is_active" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-6 gap-3 mt-2" *ngIf="showPermissionSection">
+      <div class="field col-span-6">
+        <b>Permissions</b>
+      </div>
+      <div class="field col-span-6 md:col-span-3" *ngIf="!loadingPermissions">
+        <div class="flex items-center">
+          <p-toggleswitch id="allow-verify-cashbook-expense" formControlName="allow_verify_cashbook_expense" class="mr-2" />
+          <span>Allow Verify Cashbook Expense</span>
+        </div>
+      </div>
+      <div class="field col-span-6 md:col-span-3" *ngIf="!loadingPermissions">
+        <div class="flex items-center">
+          <p-toggleswitch id="allow-verify-reimbursement-expense" formControlName="allow_verify_reimbursement_expense" class="mr-2" />
+          <span>Allow Verify Reimbursement Expense</span>
+        </div>
+      </div>
+      <div *ngIf="loadingPermissions" class="field col-span-6 mb-2">
+        loading permissions...
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="field mt-3 text-right">
+      <p-button type="submit" label="Submit" [disabled]="userForm.invalid" />
+    </div>
+
+</form>
