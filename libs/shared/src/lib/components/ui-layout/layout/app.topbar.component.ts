@@ -24,7 +24,7 @@ import { Store } from '@ngrx/store';
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
-                <img src="{{user.logo ? user.logo : 'et-logo.png'}}" alt="APCON" height="80" width="80" />
+                <img src="{{user.logo ? user.logo : 'et-logo.png'}}" alt="Expense Tracking" height="80" width="80" />
                 <!-- <span>MISTPL</span> -->
             </a>
         </div>

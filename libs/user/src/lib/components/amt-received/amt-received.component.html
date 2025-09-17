@@ -1,0 +1,188 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div class="font-semibold text-xl mb-4">
+      <p-button (click)="addAmtReceived()" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
+      <p-button 
+          [icon]="'pi pi-filter'"   
+          [severity]="'success'" 
+          (onClick)="showFilterDrawer()" class="mr-2"/>
+      <p-button *ngIf="isFilterApplied"
+          [icon]="'pi pi-filter-slash'"   
+          [severity]="'danger'" 
+          (onClick)="onClearFilter()" class="mr-2"/>
+
+      <p-multiselect [options]="months" [(ngModel)]="selectedMonths" optionValue="number" optionLabel="month" placeholder="Select Month" [maxSelectedLabels]="3" (onChange)="onMonthChange($event.value)" />
+      <p-select [options]="years" [(ngModel)]="selectedYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)"/>
+      <!-- <p-multiselect [options]="office_locations" *ngIf="office_locations.length > 0" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" [maxSelectedLabels]="3" (onChange)="onOfficeLocationChange($event.value)"  /> -->
+      
+    </div>
+    <p-table [value]="data?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:45px">SN</th>
+            <th>Received From</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <!-- <th>Created At</th> -->
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ rowIndex+1 }}</td>
+            <td>{{ row.received_from_user ? row.received_from_user.username : row.received_from_name }}</td>
+            <td>{{ row.cashbook_amount }}</td>
+            <td>{{ row.date_received | date:'dd-MM-yyyy' }}</td>
+            <!-- <td>{{ row.timestamp | date:'dd-MM-yyyy' }}</td> -->
+          </tr>
+        </ng-template>
+    </p-table>
+    <div class="mt-2 flex justify-end items-center" *ngIf="data?.data?.length > 0 && paginationText">
+      <div class="mr-2"> 
+      {{ paginationText }}
+      </div>
+      <p-buttongroup>
+        <p-button type="button" label="Prev" icon="pi pi-chevron-left" (onClick)="prev()" [disabled]="isFirstPage()" outlined />
+        <!-- <p-button type="button" icon="pi pi-refresh" (click)="reset()" text /> -->
+        <p-button type="button" label="Next" icon="pi pi-chevron-right" (onClick)="next()" [disabled]="isLastPage()" outlined iconPos="right" />
+      </p-buttongroup>
+  </div>
+</div>
+  
+<p-confirmDialog></p-confirmDialog>
+<p-dialog header="Add New" (onHide)="cancelEHEditModal()" [(visible)]="displayEHEditModal" [modal]="true" [closable]="true"  [style]="{width: '300px'}">
+  <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()" class="p-fluid">
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- Date -->
+      <div class="field col-span-12">
+        <label class="block" for="date_received">Date</label>
+        <p-datepicker appendTo="body" id="date_received" placeholder="Date" formControlName="date_received" styleClass="w-full" dateFormat="dd-mm-yy"/>
+        <small *ngIf="amtReceivedFrom.get('date_received')?.invalid && amtReceivedFrom.get('date_received')?.touched" class="text-red-500">
+          Date is required.
+        </small>
+      </div>
+
+      <!-- Amount -->
+      <div class="field col-span-12">
+        <label class="block" for="amount">Amount</label>
+        <input id="amount" placeholder="Amount" pInputText formControlName="amount" class="w-full" (input)="checkAmountInput2('amount')" />
+        <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="text-red-500">
+          Amount is required.
+        </small>
+      </div>
+
+      <!-- received_from_name -->
+      <div class="field col-span-12">
+        <label class="block" for="received_from_name">User Name</label>
+        <input id="received_from_name" placeholder="Received From User" pInputText formControlName="received_from_name" class="w-full" />
+        <small *ngIf="amtReceivedFrom.get('received_from_name')?.invalid && amtReceivedFrom.get('received_from_name')?.touched" class="text-red-500">">
+          Name is required and must be under 255 characters.
+        </small>
+      </div>
+  
+      <!-- Users -->
+      <!-- <div class="field">
+        <label class="block" for="received_from_user">User</label>
+        <p-multiselect 
+          [options]="users" 
+          formControlName="received_from_user"
+          optionLabel="name" 
+          optionValue="id"
+          display="chip"
+          placeholder="Select User" 
+          [maxSelectedLabels]="9"
+          appendTo="body" 
+          styleClass="w-full"/>
+
+        <small *ngIf="amtReceivedFrom.get('received_from_user')?.invalid && amtReceivedFrom.get('received_from_user')?.touched" class="p-error">
+          User is required.
+        </small>
+      </div> -->
+    </div>
+
+    <!-- Submit -->
+    <div class="field mt-3 text-right">
+      <p-button type="submit" label="Add" [disabled]="amtReceivedFrom.invalid" />
+    </div>
+
+  </form>
+</p-dialog>
+
+
+
+
+<p-drawer header="Advance Filter" [(visible)]="visibleUserFilter" position="right">
+    <div class="grid grid-cols-1 gap-6">
+        <form [formGroup]="userFilterForm" (ngSubmit)="onSubmitFilter()" class="flex flex-col gap-2">
+            <!-- Site Dropdown -->
+            <div class="flex flex-col" *ngIf="sites.length > 0 && isVisibleVerified">
+                <label for="office_location_ids" class="mb-1">Site</label>
+                <p-select
+                id="office_location_ids"
+                formControlName="office_location_ids"
+                [options]="sites"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select Status"
+                class="w-full"
+                ></p-select>
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('office_location_ids')?.touched && userFilterForm.get('office_location_ids')?.invalid">
+                Site is required.
+                </small> -->
+            </div>
+
+
+            <!-- Received by user -->
+            <div class="flex flex-col">
+                <label for="received_from_name" class="mb-1">Received From</label>
+                <input
+                id="received_from_name"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="received_from_name"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('received_from_name')?.touched && userFilterForm.get('received_from_name')?.invalid">
+                Received by user is required (max 255 chars).
+                </small> -->
+            </div>
+
+            <!-- Date received -->
+            <div class="flex flex-col">
+                <label for="date_received" class="mb-1">Date Received</label>
+                <p-datepicker
+                    id="date_received"
+                    dateFormat="dd-mm-yy"
+                    formControlName="date_received"
+                    styleClass="w-full"
+                    [disabledDates]="disabledDates"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('date_received')?.touched && userFilterForm.get('date_received')?.invalid">
+                Date received is Required (max 255 chars).
+                </small> -->
+            </div>
+
+            <!-- Amount -->
+            <div class="flex flex-col">
+                <label for="amount" class="mb-1">Amount</label>
+                <input
+                id="amount"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="cashbook_amount"
+                (input)="checkAmountInput('cashbook_amount')"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('cashbook_amount')?.touched && userFilterForm.get('cashbook_amount')?.invalid">
+                Amount Id is Required (max 255 chars).
+                </small> -->
+            </div>
+
+            <div class="flex justify-between mt-4">
+                <p-button label="Clear" [outlined]="true" (onClick)="clearAdvanceFilter()" />
+                <p-button [loading]="loading" [disabled]="loading || !enableAdvSearch" type="submit" label="Submit" />
+            </div>
+        </form>
+
+    </div>
+</p-drawer>

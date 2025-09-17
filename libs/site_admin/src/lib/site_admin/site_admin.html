@@ -1,0 +1,106 @@
+<div class="grid grid-cols-12 gap-8" *ngIf="dashboardData">
+
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Total Users</span>
+                <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{dashboardData.total_users.total}}</div>
+            </div>
+            <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-users text-cyan-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{dashboardData.total_users.active}} </span>
+        <span class="text-muted-color">Active, </span>
+        <span class="text-primary font-medium">{{dashboardData.total_users.inactive}} </span>
+        <span class="text-muted-color">In-active</span>
+        </div>
+    </div>
+    
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Site Admins</span>
+                <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{dashboardData.site_admin.total}}</div>
+            </div>
+            <div 
+                *ngIf="currentUser$ | async as user"
+                [routerLink]="user?.roleLower ? ['/', user.roleLower, 'site-admin-list'] : null"
+                class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border cursor-pointer" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-users text-cyan-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{dashboardData.site_admin.active}} </span>
+        <span class="text-muted-color cursor-pointer text-blue-500"
+            *ngIf="currentUser$ | async as user"
+            [routerLink]="user?.roleLower ? ['/', user.roleLower, 'site-admin-list'] : null" [queryParams]="{ is_active: true }" >Active, </span>
+        <span class="text-primary font-medium">{{dashboardData.site_admin.inactive}} </span>
+        <span class="text-muted-color cursor-pointer text-blue-500"
+            *ngIf="currentUser$ | async as user"
+            [routerLink]="user?.roleLower ? ['/', user.roleLower, 'site-admin-list'] : null" [queryParams]="{ is_active: false }" >In-active</span>
+        </div>
+    </div>
+    
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Site Users</span>
+                <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{dashboardData.user.total}}</div>
+            </div>
+            <div
+                *ngIf="currentUser$ | async as user"
+                [routerLink]="user?.roleLower ? ['/', user.roleLower, 'site-user-list'] : null"
+                class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border cursor-pointer" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-users text-cyan-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{dashboardData.user.active}} </span>
+        <span class="text-muted-color cursor-pointer text-blue-500"
+            *ngIf="currentUser$ | async as user"
+            [routerLink]="user?.roleLower ? ['/', user.roleLower, 'site-user-list'] : null" [queryParams]="{ is_active: true }" >Active, </span>
+        <span class="text-primary font-medium">{{dashboardData.user.inactive}} </span>
+        <span class="text-muted-color cursor-pointer text-blue-500"
+            *ngIf="currentUser$ | async as user"
+            [routerLink]="user?.roleLower ? ['/', user.roleLower, 'site-user-list'] : null" [queryParams]="{ is_active: false }" >In-active</span>
+        </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Verification Pending</span>
+                <!-- <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{dashboardData.user.total}}</div> -->
+            </div>
+            <div
+                class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-users text-cyan-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{dashboardData.pending_verifications.reimbursement}} </span>
+        <span class="text-muted-color cursor-pointer text-blue-500"
+            *ngIf="currentUser$ | async as user"
+            [routerLink]="user?.roleLower ? ['/', user.roleLower, 'verify-reimbursement'] : null" [queryParams]="{ is_active: true }" >Reimbursement, </span>
+        <span class="text-primary font-medium">{{dashboardData.pending_verifications.cashbook}} </span>
+        <span class="text-muted-color cursor-pointer text-blue-500"
+            *ngIf="currentUser$ | async as user"
+            [routerLink]="user?.roleLower ? ['/', user.roleLower, 'verify-cashbook'] : null" [queryParams]="{ is_active: false }" >Cashbook</span>
+        </div>
+    </div>
+
+    <div class="col-span-12">
+        <div class="card">
+            <div class="col-span-12 mb-4">
+                <h3>Cashbook Summary</h3>
+                <lib-shared-cashbook-expense-summary />
+            </div>
+            <div class="col-span-12 mb-2">
+                <h3>Reimbursement Summary</h3>
+                <lib-shared-reimbursement-summary />
+            </div>
+        </div>
+    </div>
+</div>

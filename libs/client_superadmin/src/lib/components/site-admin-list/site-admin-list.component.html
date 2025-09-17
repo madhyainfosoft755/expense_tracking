@@ -1,0 +1,25 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div class="font-semibold text-xl mb-4">
+      <p-button (click)="addNewAdmin()" icon="pi pi-plus" label="Add Site Admin" [raised]="true" severity="info" />
+    </div>
+    <div>
+        <lib-user-details-table 
+            [users]="siteadmins?.data" 
+            [action]="true" 
+            [loading]="loading" 
+            (editUser)="onEmitSelectedUser($event)"></lib-user-details-table>
+    </div>
+</div>
+
+<p-dialog header="Add Site Admin" (onHide)="onCloseUserDetailsModel()" [(visible)]="visibleUserManageDialog" [modal]="true" [closable]="true"  [style]="{width: '700px'}">
+    <lib-user-manage 
+        *ngIf="visibleUserManageDialog" 
+        [userRole]="userRole"
+        [rolesArr]="rolesArr"
+        [sitesArr]="sitesArr"
+        [userDetails]="selectedUserDetails" 
+        (closeUserDetails)="onCloseUserDetailsModel()" 
+        (newUserDetails)="onNewUserDetailsEmit($event)"
+        ></lib-user-manage>
+</p-dialog>

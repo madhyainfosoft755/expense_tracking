@@ -1,0 +1,105 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div class="font-semibold text-xl mb-4">
+      <p-button (click)="addNewClient()" icon="pi pi-plus" label="Add New Client" [raised]="true" severity="info" />
+    </div>
+    <p-table [value]="clients" [loading]="loading" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>ID</th>
+            <th>Client Name</th>
+            <th>Company Name</th>
+            <th>Icon</th>
+            <th>Is Active</th>
+            <th>Created At</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-client let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ rowIndex+1 }}</td>
+            <td>
+              <span 
+                class="text-blue-800 cursor-pointer"
+                tabindex="0"
+                (click)="getClientDetails(client)"
+                (keydown.enter)="getClientDetails(client)"
+                (keydown.space)="getClientDetails(client)"
+                >{{ client.client_name }}</span>
+            </td>
+            <td>{{ client.company_name }}</td>
+            <td>
+              <img class="client-logo" src="{{ client.icon }}" alt="{{ client.company_name+' logo' }}">
+            </td>
+            <td>
+              <p-tag *ngIf="client.is_active" severity="success" value="Active" />
+              <p-tag *ngIf="!client.is_active" severity="danger" value="Blocked" />
+            </td>
+            <td>{{ client.timestamp | date:'dd-MM-yyyy' }}</td>
+            <td>
+              <p-button (click)="showClientEditModal(client)" icon="pi pi-pen-to-square" severity="info" />
+            </td>
+          </tr>
+        </ng-template>
+    </p-table>
+</div>
+  
+<p-confirmDialog></p-confirmDialog>
+<p-dialog header="Edit Client Details" (onHide)="cancelClientEditModal()" [(visible)]="displayClientEditModal" [modal]="true" [closable]="true"  [style]="{width: '500px'}">
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="p-fluid">
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- Client Name -->
+      <div class="field">
+        <label class="block" for="client_name">Client Name</label>
+        <input id="client_name" pInputText formControlName="client_name" />
+        <small *ngIf="clientForm.get('client_name')?.invalid && clientForm.get('client_name')?.touched" class="p-error">
+          Client name is required and must be under 255 characters.
+        </small>
+      </div>
+  
+      <!-- Company Name -->
+      <div class="field">
+        <label class="block" for="company_name">Company Name</label>
+        <input id="company_name" pInputText formControlName="company_name" />
+        <small *ngIf="clientForm.get('company_name')?.invalid && clientForm.get('company_name')?.touched" class="p-error">
+          Company name is required and must be under 255 characters.
+        </small>
+      </div>
+  
+      <!-- Icon Upload -->
+      <div class="field col-span-1">
+        <label class="block" for="icon">Icon</label>
+    
+        <!-- Custom file input -->
+        <input type="file" id="icon" (change)="onFileChange($event)" #fileInput hidden accept="image/*" />
+  
+        <!-- Styled button to trigger input -->
+        <p-button type="button"  label="Choose Image" icon="pi pi-upload" (click)="fileInput.click()" />
+  
+        <!-- Display selected file name (optional) -->
+        <div *ngIf="uploadedIcon" class="mt-2">Selected: {{ uploadedIcon.name }}</div>
+  
+        <!-- Error message -->
+        <small *ngIf="iconError" class="p-error">{{ iconError }}</small>
+      </div>
+
+      <!-- Row 2, Col 2: Icon Preview -->
+      <div class="flex items-center" *ngIf="previewUrl">
+        <img [src]="previewUrl" alt="Preview" class="max-h-[100px] max-w-[200px] object-contain border rounded shadow" />
+      </div>
+  
+      <!-- Is Active Switch -->
+      <div class="field col-span-1 flex items-center">
+        <label class="mr-2" for="is_active">Active</label>
+        <p-toggleswitch formControlName="is_active" />
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="field mt-3 text-right">
+      <p-button type="submit" label="Submit" [disabled]="clientForm.invalid" />
+    </div>
+
+  </form>
+</p-dialog>

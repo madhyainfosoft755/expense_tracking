@@ -1,0 +1,18 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div class="font-semibold text-xl mb-4">
+      <p-button (click)="addNewAppSuperadmin()" icon="pi pi-plus" label="Add App Superadmin" [raised]="true" severity="info" />
+    </div>
+    <div>
+        <lib-user-details-table [users]="superadmins" [action]="false" [loading]="loading" (editUser)="onEmitSelectedUser($event)"></lib-user-details-table>
+    </div>
+</div>
+
+<p-dialog header="Add App Superadmin" (onHide)="onCloseUserDetailsModel()" [(visible)]="visibleUserManageDialog" [modal]="true" [closable]="true"  [style]="{width: '700px'}">
+    <lib-user-manage 
+        *ngIf="visibleUserManageDialog" 
+        [userDetails]="selectedUserDetails" 
+        (closeUserDetails)="onCloseUserDetailsModel()" 
+        (newUserDetails)="onNewUserDetailsEmit($event)"
+        ></lib-user-manage>
+</p-dialog>

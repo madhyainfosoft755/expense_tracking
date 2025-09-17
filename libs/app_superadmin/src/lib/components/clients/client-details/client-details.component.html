@@ -1,0 +1,47 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div *ngIf="clientDetails">
+        <div class="font-semibold text-xl mb-4">Client Details</div>
+        <div class="p-fluid p-m-4">
+
+            <h2>Client Overview</h2>
+          
+            <p-panel header="Client Summary" [toggleable]="true">
+              <div class="p-grid p-mt-2">
+                <div class="p-col-12 p-md-3">Superadmins: <strong>{{ clientDetails.client_superadmin_count }}</strong></div>
+                <div class="p-col-12 p-md-3">Admins: <strong>{{ clientDetails.client_admin_count }}</strong></div>
+                <div class="p-col-12 p-md-3">Site Admins: <strong>{{ clientDetails.client_siteadmin_count }}</strong></div>
+                <div class="p-col-12 p-md-3">Users: <strong>{{ clientDetails.client_user_count }}</strong></div>
+              </div>
+          
+              <div class="p-grid p-mt-2">
+                <div class="p-col-12 p-md-4">Office Locations: <strong>{{ clientDetails.office_location_count }}</strong></div>
+                <div class="p-col-12 p-md-4">Expense Heads: <strong>{{ clientDetails.expense_head_count }}</strong></div>
+                <div class="p-col-12 p-md-4">Projects: <strong>{{ clientDetails.projects_count }}</strong></div>
+              </div>
+            </p-panel>
+          
+            <p-panel header="Office Locations" class="p-mt-4">
+              <p-table [value]="clientDetails.office_locations" *ngIf="!!clientDetails?.office_locations?.length">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Office ID</th>
+                    <th>Name</th>
+                    <th>User Count</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-location let-rowIndex="rowIndex">
+                  <tr>
+                    <td>{{ rowIndex+1 }}</td>
+                    <td>{{ location.name }}</td>
+                    <td>{{ location.user_count }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <p-message *ngIf="clientDetails?.office_locations?.length === 0" severity="info" text="No office locations available."></p-message>
+            </p-panel>
+          
+        </div>
+          
+    </div>
+</div>

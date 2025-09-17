@@ -22,18 +22,55 @@
 //     { path: '**', redirectTo: '/notfound' }
 // ];
 
-
-
-
 import { Route } from '@angular/router';
 
-import { appSuperadminAuthGuard, authGuard, clientAdminAuthGuard, clientSuperadminAuthGuard, LoginComponent, siteAdminAuthGuard, userAuthGuard } from '@auth';
+import {
+  appSuperadminAuthGuard,
+  authGuard,
+  clientAdminAuthGuard,
+  clientSuperadminAuthGuard,
+  LoginComponent,
+  siteAdminAuthGuard,
+  userAuthGuard,
+} from '@auth';
 
 export const appRoutes: Route[] = [
   {
+    path: 'public',
+    loadChildren: () => import('@public').then((m) => m.publicRoutes),
+  },
+  {
+    path: 'user',
+    canActivate: [userAuthGuard],
+    loadChildren: () => import('@user').then((m) => m.userRoutes),
+  },
+  {
+    path: 'site-admin',
+    canActivate: [siteAdminAuthGuard],
+    loadChildren: () => import('@site_admin').then((m) => m.siteAdminRoutes),
+  },
+  {
+    path: 'admin',
+    canActivate: [clientAdminAuthGuard],
+    loadChildren: () =>
+      import('@client_admin').then((m) => m.clientAdminRoutes),
+  },
+  {
+    path: 'superadmin',
+    canActivate: [clientSuperadminAuthGuard],
+    loadChildren: () =>
+      import('@client_superadmin').then((m) => m.clientSuperadminRoutes),
+  },
+  {
+    path: 'app-superadmin',
+    canActivate: [appSuperadminAuthGuard],
+    loadChildren: () =>
+      import('@app_superadmin').then((m) => m.appSuperadminRoutes),
+  },
+  {
     path: '',
     redirectTo: 'login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
@@ -44,48 +81,46 @@ export const appRoutes: Route[] = [
   {
     path: 'forgot-password',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('@auth').then(m => m.ForgotPasswordComponent),
+    loadComponent: () => import('@auth').then((m) => m.ForgotPasswordComponent),
     data: { title: 'Forgot Password' },
   },
   {
     path: 'reset-password/:token',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('@auth').then(m => m.ResetPasswordComponent),
+    loadComponent: () => import('@auth').then((m) => m.ResetPasswordComponent),
     data: { title: 'Reset Password' },
   },
-//   {
-//     path: 'public',
-//     loadChildren: () => import('public/Routes').then((m) => m!.remoteRoutes),
-//   },
-//   {
-//     path: 'site-admin',
-//     canActivate: [siteAdminAuthGuard],
-//     loadChildren: () =>
-//       import('site_admin/Routes').then((m) => m!.remoteRoutes),
-//   },
-//   {
-//     path: 'admin',
-//     canActivate: [clientAdminAuthGuard],
-//     loadChildren: () =>
-//       import('client_admin/Routes').then((m) => m!.remoteRoutes),
-//   },
-//   {
-//     path: 'app-superadmin',
-//     canActivate: [appSuperadminAuthGuard],
-//     loadChildren: () =>
-//       import('app_superadmin/Routes').then((m) => m!.remoteRoutes),
-//   },
-//   {
-//     path: 'superadmin',
-//     canActivate: [clientSuperadminAuthGuard],
-//     loadChildren: () =>
-//       import('client_superadmin/Routes').then((m) => m!.remoteRoutes),
-//   },
-//   {
-//     path: 'user',
-//     canActivate: [userAuthGuard],
-//     loadChildren: () => import('user/Routes').then((m) => m!.remoteRoutes),
-//   },
+  //   {
+  //     path: 'public',
+  //     loadChildren: () => import('public/Routes').then((m) => m!.remoteRoutes),
+  //   },
+  //   {
+  //     path: 'site-admin',
+  //     canActivate: [siteAdminAuthGuard],
+  //     loadChildren: () =>
+  //       import('site_admin/Routes').then((m) => m!.remoteRoutes),
+  //   },
+  //   {
+  //     path: 'admin',
+  //     canActivate: [clientAdminAuthGuard],
+  //     loadChildren: () =>
+  //       import('client_admin/Routes').then((m) => m!.remoteRoutes),
+  //   },
+  //   {
+  //     path: 'app-superadmin',
+  //     canActivate: [appSuperadminAuthGuard],
+  //     loadChildren: () =>
+  //       import('app_superadmin/Routes').then((m) => m!.remoteRoutes),
+  //   },
+  //   {
+  //     path: 'superadmin',
+  //     canActivate: [clientSuperadminAuthGuard],
+  //     loadChildren: () =>
+  //       import('client_superadmin/Routes').then((m) => m!.remoteRoutes),
+  //   },
+  //   {
+  //     path: 'user',
+  //     canActivate: [userAuthGuard],
+  //     loadChildren: () => import('user/Routes').then((m) => m!.remoteRoutes),
+  //   },
 ];

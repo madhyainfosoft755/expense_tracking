@@ -1,0 +1,94 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card" *ngIf="cashbookData && !loading">
+    <div *ngIg="userRole !== 'USER'" class="font-semibold text-xl mb-4">
+      <p-button (click)="toggleTotals()" icon="pi pi-plus" label="{{userTotal ? 'Remove User Total' : 'Add User Total'}}" [raised]="true" severity="info" class="mr-2" />
+    </div>
+    <div>
+        <!-- <h3>Received Amount</h3> -->
+        <p-table [value]="cashbookData" showGridlines stripedRows size="small" [loading]="loading" [paginator]="true" [rows]="100">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:45px">SN</th>
+                    <th>Amt Received Date</th>
+                    <th>Received Amt</th>
+                    <th>Received By</th>
+                    <th>Received From</th>
+                    <th>Expense Date</th>
+                    <th>Expense Amt</th>
+                    <th>Expense Head</th>
+                    <th>Descriptions</th>
+                    <th>Approved By</th>
+                    <th>Remarks</th>
+                    <th>Approved Date</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cashbook let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{ rowIndex+1 }}</td>
+                    <!-- <td>
+                        {{ cashbook.date_received | date:'dd-MM-yyyy' }}
+                    </td>
+                    <td>{{ cashbook.cashbook_received_from_user ? cashbook.cashbook_received_from_user?.name : cashbook.received_from_name }}</td>
+                    <td>{{ cashbook.cashbook_amount }}</td>
+                    <td>
+                        {{ cashbook?.expense_head?.name }}
+                    </td>
+                    <td>
+                        {{ cashbook?.descriptions }}
+                    </td> -->
+                    <td>{{ cashbook.amtReceivedDate || '-' }}</td>
+                    <td>{{ cashbook.receivedAmt || '-' }}</td>
+                    <td>{{ cashbook.receivedBy || '-' }}</td>
+                    <td>{{ cashbook.receivedFrom || '-' }}</td>
+                    <td>{{ cashbook.expenseDate || '-' }}</td>
+                    <td>{{ cashbook.expenseAmt || '-' }}</td>
+                    <td>{{ cashbook.expenseHead || '-' }}</td>
+                    <td>{{ cashbook.descriptions || '-' }}</td>
+                    <td>{{ cashbook.approvedBy || '-' }}</td>
+                    <td>{{ cashbook.remarks || '-' }}</td>
+                    <td>{{ cashbook.approvedDate || '-' }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <!-- <div>
+        <h3>Expense Amount</h3>
+        <p-table [value]="cashbookData.expense_data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="true" [rows]="50">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:45px">SN</th>
+                    <th>Date</th>
+                    <th>Received From</th>
+                    <th>Amount</th>
+                    <th>Expense Head</th>
+                    <th>Description</th>
+                    <th>Expense Amount</th>
+                    <th>Remarks</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cashbookexpense let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{ rowIndex+1 }}</td>
+                    <td>
+                        {{ cashbookexpense.date | date:'dd-MM-yyyy' }}
+                    </td>
+                    <td>{{ cashbookexpense.receieved_from }}</td>
+                    <td>{{ cashbookexpense.expense_amount }}</td>
+                    <td>
+                        {{ cashbookexpense.expense_expense_head?.name }}
+                    </td>
+                    <td>
+                        {{ cashbookexpense.description }}
+                    </td>
+                    <td>
+                        {{ cashbookexpense.expense_amount }}
+                    </td>
+                    <td>{{ cashbookexpense.remarks }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div> -->
+</div>
+<div class="card" *ngIf="loading">
+    Loading...
+</div>

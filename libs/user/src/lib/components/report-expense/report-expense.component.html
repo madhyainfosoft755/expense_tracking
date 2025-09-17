@@ -1,0 +1,340 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div class="font-semibold text-xl mb-4">
+      <p-button (click)="addAmtReceived()" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
+      <p-button 
+          [icon]="'pi pi-filter'"   
+          [severity]="'success'" 
+          (onClick)="showFilterDrawer()" class="mr-2"/>
+      <p-button *ngIf="isFilterApplied"
+          [icon]="'pi pi-filter-slash'"   
+          [severity]="'danger'" 
+          (onClick)="onClearFilter()" class="mr-2"/>
+
+      <p-multiselect [options]="months" [(ngModel)]="selectedMonths" optionValue="number" optionLabel="month" placeholder="Select Month" [maxSelectedLabels]="3" (onChange)="onMonthChange($event.value)" />
+      <p-select [options]="years" [(ngModel)]="selectedYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)"/>
+      
+    </div>
+    <p-table [value]="data?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:45px">SN</th>
+            <th *ngIf="isVisibleVerified">Expense By</th>
+            <th>Expense Head</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Vendor Name</th>
+            <th>Bill</th>
+            <th>Date</th>
+            <th>Approved By</th>
+            <th>Status</th>
+            <th>Remarks</th>
+            <th>Approved At</th>
+            <!-- <th>Created At</th> -->
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ rowIndex+1 }}</td>
+            <td *ngIf="isVisibleVerified">{{ row.expense_expense_by?.name }}</td>
+            <td>{{ row.expense_expense_head?.name }}</td>
+            <td>{{ row.description }}</td>
+            <td>{{ row.expense_amount }}</td>
+            <td>{{ row.expense_vendor_name }}</td>
+            <td>
+              <!-- <img *ngIf="row?.bill_image" [src]="row.bill_image" alt="Bill Image" class="w-20 h-auto rounded shadow" /> -->
+              <p-image 
+                *ngIf="row?.bill_image" 
+                [src]="row.bill_image" 
+                alt="Bill Image"
+                preview
+                class="rounded shadow"
+                height="30"
+                width="30"
+              ></p-image>
+            </td>
+            <td>{{ row.date | date:'dd-MM-yyyy' }}</td>
+            <td>{{ row.expense_approved_by?.name }}</td>
+            <td>{{ row.status }}</td>
+            <td>{{ row.remarks }}</td>
+            <td>{{ row.date_approved | date:'dd-MM-yyyy' }}</td>
+            <!-- <td>{{ row.timestamp | date:'dd-MM-yyyy' }}</td> -->
+          </tr>
+        </ng-template>
+    </p-table>
+    <div class="mt-2 flex justify-end items-center" *ngIf="data?.data?.length > 0 && paginationText">
+      <div class="mr-2"> 
+      {{ paginationText }}
+      </div>
+      <p-buttongroup>
+        <p-button type="button" label="Prev" icon="pi pi-chevron-left" (onClick)="prev()" [disabled]="isFirstPage()" outlined />
+        <!-- <p-button type="button" icon="pi pi-refresh" (click)="reset()" text /> -->
+        <p-button type="button" label="Next" icon="pi pi-chevron-right" (onClick)="next()" [disabled]="isLastPage()" outlined iconPos="right" />
+      </p-buttongroup>
+    </div>
+</div>
+  
+<p-confirmDialog></p-confirmDialog>
+<p-dialog header="Add New" (onHide)="cancelEHEditModal()" [(visible)]="displayEHEditModal" [modal]="true" [closable]="true"  [style]="{width: '300px'}">
+  <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()" class="p-fluid">
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- Date -->
+      <div class="field col-span-12">
+        <label class="block" for="date">Date</label>
+        <p-datepicker id="date" appendTo="body" placeholder="Date" formControlName="date" styleClass="w-full" dateFormat="dd-mm-yy"/>
+        <small *ngIf="amtReceivedFrom.get('date')?.invalid && amtReceivedFrom.get('date')?.touched" class="text-red-500">
+          Date is required.
+        </small>
+      </div>
+
+      <!-- Amount -->
+      <div class="field col-span-12">
+        <label class="block" for="amount">Amount</label>
+        <input id="amount" placeholder="Amount" pInputText formControlName="amount" class="w-full" (input)="checkAmountInput2('amount')" />
+        <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="text-red-500">
+          Amount is required.
+        </small>
+      </div>
+
+      <!-- Vendor name -->
+      <div class="field col-span-12">
+          <label for="vendor_name" class="block">Vendor Name</label>
+          <input
+          id="vendor_name"
+          pInputText
+          maxlength="255"
+          formControlName="vendor_name"
+          placeholder="Vendor Name"
+          class="w-full"
+          />
+          <!-- <small class="text-red-500" *ngIf="userFilterForm.get('vendor_name')?.touched && userFilterForm.get('vendor_name')?.invalid">
+          Vendor name is required (max 255 chars).
+          </small> -->
+      </div>
+
+      <!-- description -->
+      <div class="field col-span-12">
+        <label class="block" for="description">Description</label>
+        <input id="description" placeholder="Received From User" pInputText formControlName="description" class="w-full" />
+        <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="text-red-500">
+          Description is required.
+        </small>
+      </div>
+  
+      <!-- Expense Head -->
+      <div class="field col-span-12">
+        <label class="block" for="expense_head">Expense Head</label>
+        <p-select 
+            [options]="expenseHeads" 
+            formControlName="expense_head"
+            optionLabel="name"
+            optionValue="id" 
+            placeholder="Select" 
+            appendTo="body" 
+            class="w-full"
+            [filter]="true" 
+            filterBy="name"  />
+
+        <small *ngIf="amtReceivedFrom.get('expense_head')?.invalid && amtReceivedFrom.get('expense_head')?.touched" class="text-red-500">
+          Expense Head is required.
+        </small>
+      </div>
+
+      <!-- Bill Image Upload -->
+      <div class="field col-span-12">
+        <label for="bill_image">Upload Bill Image</label>
+        <input
+          type="file"
+          id="bill_image"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          class="w-full border p-2 rounded"
+        />
+        <small *ngIf="imageError" class="p-error">{{ imageError }}</small>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="field mt-3 text-right">
+      <p-button type="submit" label="Add" [disabled]="amtReceivedFrom.invalid" />
+    </div>
+
+  </form>
+</p-dialog>
+
+
+
+
+<p-drawer header="Advance Filter" [(visible)]="visibleUserFilter" position="right">
+    <div class="grid grid-cols-1 gap-6">
+        <form [formGroup]="userFilterForm" (ngSubmit)="onSubmitFilter()" class="flex flex-col gap-2">
+            <!-- Site Dropdown -->
+            <div class="flex flex-col" *ngIf="sites.length > 0 && isVisibleVerified">
+                <label for="expense_office_location" class="mb-1">Site</label>
+                <p-select
+                id="expense_office_location"
+                formControlName="expense_office_location"
+                [options]="sites"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select Status"
+                class="w-full"
+                ></p-select>
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('expense_office_location')?.touched && userFilterForm.get('expense_office_location')?.invalid">
+                Site is required.
+                </small> -->
+            </div>
+
+            <!-- Expense Heads Dropdown -->
+            <div class="flex flex-col" *ngIf="expenseHeads.length > 0">
+                <label for="expense_expense_head" class="mb-1">Expense Head</label>
+                <p-select
+                id="expense_expense_head"
+                formControlName="expense_expense_head"
+                [options]="expenseHeads"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select Status"
+                class="w-full"
+                ></p-select>
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('expense_expense_head')?.touched && userFilterForm.get('expense_expense_head')?.invalid">
+                Expense Heads is required.
+                </small> -->
+            </div>
+
+
+            <!-- Received by user -->
+            <div class="flex flex-col" *ngIf="isVisibleVerified">
+                <label for="expense_by_name" class="mb-1">Received By</label>
+                <input
+                id="expense_by_name"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="expense_by_name"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('expense_by_name')?.touched && userFilterForm.get('expense_by_name')?.invalid">
+                Received by user is required (max 255 chars).
+                </small> -->
+            </div>
+
+            <!-- Date received -->
+            <div class="flex flex-col">
+                <label for="expense_date" class="mb-1">Date Received</label>
+                <p-datepicker
+                    id="expense_date"
+                    dateFormat="dd-mm-yy"
+                    formControlName="expense_date"
+                    styleClass="w-full"
+                    [disabledDates]="disabledDates"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('expense_date')?.touched && userFilterForm.get('expense_date')?.invalid">
+                Date received is Required (max 255 chars).
+                </small> -->
+            </div>
+
+            <!-- Amount -->
+            <div class="flex flex-col">
+                <label for="amount" class="mb-1">Amount</label>
+                <input
+                id="amount"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="amount"
+                (input)="checkAmountInput('amount')"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('amount')?.touched && userFilterForm.get('amount')?.invalid">
+                Amount Id is Required (max 255 chars).
+                </small> -->
+            </div>
+
+
+            <!-- Vendor name -->
+            <div class="flex flex-col">
+                <label for="expense_vendor_name" class="mb-1">Vendor Name</label>
+                <input
+                id="expense_vendor_name"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="expense_vendor_name"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('expense_vendor_name')?.touched && userFilterForm.get('expense_vendor_name')?.invalid">
+                Vendor name is required (max 255 chars).
+                </small> -->
+            </div>
+
+
+
+
+            <!-- Status -->
+            <div class="flex flex-col">
+                <label for="status" class="mb-1">Status</label>
+                <input
+                id="status"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="status"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('status')?.touched && userFilterForm.get('status')?.invalid">
+                Status Id is Required (max 255 chars).
+                </small> -->
+            </div>
+
+
+            <!-- Remark -->
+            <div class="flex flex-col">
+                <label for="remarks" class="mb-1">Remarks</label>
+                <input
+                id="remarks"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="remarks"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('remarks')?.touched && userFilterForm.get('remarks')?.invalid">
+                Remark Id is Required (max 255 chars).
+                </small> -->
+            </div>
+
+            <!-- Received by user -->
+            <div class="flex flex-col">
+                <label for="approved_by_name" class="mb-1">Approved By</label>
+                <input
+                id="approved_by_name"
+                type="text"
+                pInputText
+                maxlength="255"
+                formControlName="approved_by_name"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('approved_by_name')?.touched && userFilterForm.get('approved_by_name')?.invalid">
+                Received by user is required (max 255 chars).
+                </small> -->
+            </div>
+
+            <!-- Date received -->
+            <div class="flex flex-col">
+                <label for="date_approved" class="mb-1">Date Approved</label>
+                <p-datepicker
+                    id="date_approved"
+                    dateFormat="dd-mm-yy"
+                    formControlName="date_approved"
+                    styleClass="w-full"
+                    [disabledDates]="disabledDates"
+                />
+                <!-- <small class="text-red-500" *ngIf="userFilterForm.get('date_approved')?.touched && userFilterForm.get('date_approved')?.invalid">
+                Date received is Required (max 255 chars).
+                </small> -->
+            </div>
+
+            <div class="flex justify-between mt-4">
+                <p-button label="Clear" [outlined]="true" (onClick)="clearAdvanceFilter()" />
+                <p-button [loading]="loading" [disabled]="loading || !enableAdvSearch" type="submit" label="Submit" />
+            </div>
+        </form>
+
+    </div>
+</p-drawer>

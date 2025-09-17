@@ -1,0 +1,97 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <!-- <div class="font-semibold text-xl mb-4">
+      <p-button (click)="addNewExpenseHead()" icon="pi pi-plus" label="Add New Expense Head" [raised]="true" severity="info" />
+    </div> -->
+    <p-table #eht [value]="expenseHeads" showGridlines stripedRows size="small" [loading]="loading" [paginator]="true" [rows]="20"
+        [globalFilterFields]="['name']">
+        <ng-template #caption>
+            <div class="flex">
+                <p-button (click)="addNewExpenseHead()" icon="pi pi-plus" label="Add New Expense Head" [raised]="true" severity="info" />
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="eht.filterGlobal($any($event.target).value, 'contains')" placeholder="Search Name" />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:45px">SN</th>
+            <th>Expense Head Name</th>
+            <th>Is Active</th>
+            <!-- <th>Sites</th> -->
+            <th>Created By</th>
+            <th>Created At</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-eh let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ rowIndex+1 }}</td>
+            <td>{{ eh.name }}</td>
+            <td>
+              <p-tag *ngIf="eh.is_active" severity="success" value="Active" />
+              <p-tag *ngIf="!eh.is_active" severity="danger" value="In-active" />
+            </td>
+            <!-- <td>
+              <p-tag styleClass="m-2" severity="success" [value]="office_location.name" *ngFor="let office_location of eh.office_locations_data" />
+            </td> -->
+            <td>{{ eh.created_by.username }}</td>
+            <td>{{ eh.timestamp | date:'dd-MM-yyyy' }}</td>
+            <td>
+              <p-button (click)="showEHEditModal(eh)" icon="pi pi-pen-to-square" severity="info" />
+            </td>
+          </tr>
+        </ng-template>
+    </p-table>
+</div>
+  
+<p-confirmDialog></p-confirmDialog>
+<p-dialog header="{{ selectedExpenseHead ? 'Edit Expense Head Details' : 'Add New Expense Head' }}" (onHide)="cancelEHEditModal()" [(visible)]="displayEHEditModal" [modal]="true" [closable]="true"  [style]="{width: '500px'}">
+  <form [formGroup]="expenseHeadForm" (ngSubmit)="onSubmit()" class="p-fluid">
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- Name -->
+      <div class="field">
+        <label class="block" for="name">Expense Head Name</label>
+        <input id="name" placeholder="Expense Head Name" pInputText formControlName="name" styleClass="w-full" />
+        <small *ngIf="expenseHeadForm.get('name')?.invalid && expenseHeadForm.get('name')?.touched" class="p-error">
+          Name is required and must be under 255 characters.
+        </small>
+      </div>
+  
+      <!-- Sites -->
+      <!-- <div class="field">
+        <label class="block" for="office_locations">Sites</label>
+        <p-multiselect 
+          [options]="sites" 
+          formControlName="office_locations"
+          optionLabel="name" 
+          optionValue="id"
+          display="chip"
+          placeholder="Select Sites" 
+          [maxSelectedLabels]="9"
+          appendTo="body" 
+          styleClass="w-full"/>
+
+        <small *ngIf="expenseHeadForm.get('office_locations')?.invalid && expenseHeadForm.get('office_locations')?.touched" class="p-error">
+          Sites are required.
+        </small>
+      </div> -->
+  
+      <!-- Is Active Switch -->
+      <!-- <div class="field col-span-1 flex items-center" *ngIf="this.selectedExpenseHead">
+        <label class="mr-2" for="is_active">Active</label>
+        <p-toggleswitch formControlName="is_active" />
+      </div> -->
+    </div>
+
+    <!-- Submit -->
+    <div class="field mt-3 text-right">
+      <p-button type="submit" label="Submit" [disabled]="expenseHeadForm.invalid" />
+    </div>
+
+  </form>
+</p-dialog>

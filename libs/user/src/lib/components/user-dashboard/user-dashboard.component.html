@@ -1,0 +1,84 @@
+<div class="grid grid-cols-12 gap-8" *ngIf="financial_summary_data">
+
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Total Incomming</span>
+                <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{financial_summary_data.total_incoming}}</div>
+            </div>
+            <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-indian-rupee text-blue-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{financial_summary_data.net_balance}} </span>
+        <span class="text-muted-color">net_balance</span>
+        </div>
+    </div>
+    
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Pending</span>
+                <div class="text-surface-900 dark:text-surface-0 font-medium text-xl"></div>
+            </div>
+            <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-indian-rupee text-blue-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{financial_summary_data.pending_to_pay}} </span>
+        <span class="text-muted-color">Pending Pay, </span>
+        <span class="text-primary font-medium">{{financial_summary_data.pending_to_receive}} </span>
+        <span class="text-muted-color">Pending Receiev</span>
+        </div>
+    </div>
+    
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Completed</span>
+                <div class="text-surface-900 dark:text-surface-0 font-medium text-xl"></div>
+            </div>
+            <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-indian-rupee text-blue-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{financial_summary_data.expense_completed}} </span>
+        <span class="text-muted-color">Expense Complete, </span>
+        <span class="text-primary font-medium">{{financial_summary_data.receive_completed}} </span>
+        <span class="text-muted-color">Receive Complete</span>
+        </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">Project Expense</span>
+                <!-- <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">0</div> -->
+            </div>
+            <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-indian-rupee text-blue-500 text-xl!"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{ financial_summary_data.project_expense_completed }} </span>
+        <span class="text-muted-color">Verified, </span>
+        <span class="text-primary font-medium">{{ financial_summary_data.project_expense_pending }} </span>
+        <span class="text-muted-color">Pending</span>
+        </div>
+    </div>
+</div>
+<div class="card mt-2">
+    <div class="grid grid-cols-6 ">
+        <div class="col-span-6">
+            <span class="text-2xl text-muted-color mb-2">Cashbook Amount: </span>
+            <span class="text-2xl font-medium text-blue-500 dark:text-surface-0 mr-2">{{ financial_summary_data?.cashbook_amount | currency:'INR':'symbol':'1.0-0' }}</span>
+            <span class="text-2xl text-muted-color mb-2">Expense Amount: </span>
+            <span class="text-2xl font-medium text-blue-500 dark:text-surface-0 mr-2">{{ financial_summary_data?.expense_amount | currency:'INR':'symbol':'1.0-0' }}</span>
+            <span class="text-2xl text-muted-color mb-2">Remaining Amount: </span>
+            <span class="text-2xl font-medium dark:text-surface-0 mr-2" [ngClass]="financial_summary_data?.remaining_amount > 0 ? 'text-green-500' : 'text-red-500'">{{ financial_summary_data?.remaining_amount | currency:'INR':'symbol':'1.0-0' }}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <p-table #eht [value]="expenseHeads" showGridlines stripedRows size="small" [loading]="loading" [paginator]="true" [rows]="20"
+        [globalFilterFields]="['name']">
+        <ng-template #caption>
+            <div class="flex">
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="eht.filterGlobal($any($event.target).value, 'contains')" placeholder="Search Name" />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:45px">SN</th>
+            <th>Expense Head Name</th>
+            <th>Is Active</th>
+            <!-- <th>Sites</th> -->
+            <th>Created By</th>
+            <th>Created At</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-eh let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ rowIndex+1 }}</td>
+            <td>{{ eh.name }}</td>
+            <td>
+              <p-tag *ngIf="eh.is_active" severity="success" value="Active" />
+              <p-tag *ngIf="!eh.is_active" severity="danger" value="In-active" />
+            </td>
+            <!-- <td>
+              <p-tag styleClass="m-2" severity="success" [value]="office_location.name" *ngFor="let office_location of eh.office_locations_data" />
+            </td> -->
+            <td>{{ eh.created_by.username }}</td>
+            <td>{{ eh.timestamp | date:'dd-MM-yyyy' }}</td>
+          </tr>
+        </ng-template>
+    </p-table>
+</div>

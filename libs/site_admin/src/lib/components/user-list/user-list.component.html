@@ -1,0 +1,42 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div class="font-semibold text-xl mb-4">
+        <p-button (click)="addNewSiteUser()" icon="pi pi-plus" label="Add New User" [raised]="true" severity="info" class="mr-2" />
+        <p-button 
+            [icon]="'pi pi-filter'"   
+            [severity]="'success'" 
+            (onClick)="showFilterDrawer()" class="mr-2"/>
+        <p-button *ngIf="isFilterApplied"
+            [icon]="'pi pi-filter-slash'"   
+            [severity]="'danger'" 
+            (onClick)="onClearFilter()" class="mr-2"/>
+    </div>
+    <div>
+        <lib-user-details-table 
+            [users]="users" 
+            [action]="true" 
+            [loading]="loading" 
+            (pageChanged)="onPageChanged($event)"
+            (editUser)="onEmitSelectedUser($event)"></lib-user-details-table>
+    </div>
+</div>
+
+<p-dialog header="Add New User" (onHide)="onCloseUserDetailsModel()" [(visible)]="visibleUserManageDialog" [modal]="true" [closable]="true"  [style]="{width: '700px'}">
+    <lib-user-manage
+         *ngIf="visibleUserManageDialog" 
+        [userRole]="userRole"
+        [rolesArr]="rolesArr"
+        [createRole]="'USER'"
+        [userDetails]="selectedUserDetails" 
+        (closeUserDetails)="onCloseUserDetailsModel()" 
+        (newUserDetails)="onNewUserDetailsEmit($event)"
+        ></lib-user-manage>
+</p-dialog>
+
+<p-drawer header="Advance Filter" [(visible)]="visibleUserFilter" position="right">
+    <lib-user-filter
+        [loadingAdvanceFilter]="loading"
+        [preFilters]="preFilters"
+        (filterData)="onEmitFilterData($event)"
+    ></lib-user-filter>
+</p-drawer>

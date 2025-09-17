@@ -1,0 +1,93 @@
+<p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+<div class="card">
+    <div>
+        <div class="font-semibold text-xl mb-4">
+            <p-button (click)="addNewUser()" icon="pi pi-plus" label="Add User" [raised]="true" severity="info" class="mr-2" />
+            <p-button 
+                [icon]="'pi pi-filter'"   
+                [severity]="'success'" 
+                (onClick)="showFilterDrawer()" class="mr-2"/>
+            <p-button *ngIf="isFilterApplied"
+                [icon]="'pi pi-filter-slash'"   
+                [severity]="'danger'" 
+                (onClick)="onClearFilter()" class="mr-2"/>
+        </div>
+        <p-table [value]="users?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false" [rows]="50">
+            <ng-template pTemplate="header">
+                <tr>
+                <th style="width:45px">SN</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Employee Id</th>
+                <th>Site</th>
+                <th>Role</th>
+                <th>Is Active</th>
+                <th>Created At</th>
+                <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+                <tr>
+                <td>{{ rowIndex+1 }}</td>
+                <td>
+                    {{ user.first_name }} {{ user.last_name }}
+                </td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.username }}</td>
+                <td>
+                    {{ user.mobile_number }}
+                </td>
+                <td>
+                    {{ user.employee_id }}
+                </td>
+                <td>
+                    <span *ngIf="user.office_location">{{ user.office_location.name }}</span>
+                </td>
+                <td>
+                    {{ user.role }}
+                </td>
+                <td>
+                    <p-tag *ngIf="user.is_active" severity="success" value="Active" />
+                    <p-tag *ngIf="!user.is_active" severity="danger" value="Blocked" />
+                </td>
+                <td>{{ user.date_joined | date:'dd-MM-yyyy' }}</td>
+                <td>
+                    <p-button (click)="selectUser(user)" icon="pi pi-pen-to-square" severity="info" />
+                </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="mt-2 flex justify-end items-center" *ngIf="users?.data?.length > 0 && paginationText">
+            <div class="mr-2"> 
+            {{ paginationText }}
+            </div>
+            <p-buttongroup>
+            <p-button type="button" label="Prev" icon="pi pi-chevron-left" (onClick)="prev()" [disabled]="isFirstPage()" outlined />
+            <!-- <p-button type="button" icon="pi pi-refresh" (click)="reset()" text /> -->
+            <p-button type="button" label="Next" icon="pi pi-chevron-right" (onClick)="next()" [disabled]="isLastPage()" outlined iconPos="right" />
+            </p-buttongroup>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Edit User Details" (onHide)="onCloseUserDetailsModel()" [(visible)]="visibleUserManageDialog" [modal]="true" [closable]="true"  [style]="{width: '700px'}">
+    <lib-user-manage 
+        *ngIf="visibleUserManageDialog" 
+        [userRole]="userRole"
+        [rolesArr]="rolesArr"
+        [sitesArr]="sitesArr"
+        [userDetails]="selectedUserDetails" 
+        (closeUserDetails)="onCloseUserDetailsModel()" 
+        (newUserDetails)="onNewUserDetailsEmit($event)"
+        ></lib-user-manage>
+</p-dialog>
+
+<p-drawer header="Advance Filter" [(visible)]="visibleUserFilter" position="right">
+    <lib-user-filter
+        [loadingAdvanceFilter]="loading"
+        [preFilters]="preFilters"
+        (filterData)="onEmitFilterData($event)"
+    ></lib-user-filter>
+</p-drawer>
