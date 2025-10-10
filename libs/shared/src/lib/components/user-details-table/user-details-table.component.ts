@@ -45,6 +45,8 @@ export class UserDetailsTableComponent implements OnChanges {
 
     next() {
       console.log('next call')
+      console.log(this.users)
+      console.log(this.users?.next_page)
         this.pageChanged.emit(this.users?.next_page);
     }
 

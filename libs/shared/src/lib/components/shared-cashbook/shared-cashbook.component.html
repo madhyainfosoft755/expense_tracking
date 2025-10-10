@@ -32,7 +32,11 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-cashbook let-rowIndex="rowIndex">
-                <tr>
+                <tr 
+                    [ngClass]="{
+                    'grand-total-row': cashbook.receivedBy?.toLowerCase() === 'grand total',
+                    'total-row': cashbook.receivedBy?.toLowerCase().startsWith('total for')
+                    }">
                     <td>{{ rowIndex+1 }}</td>
                     <!-- <td>
                         {{ cashbook.date_received | date:'dd-MM-yyyy' }}
@@ -98,7 +102,4 @@
             </ng-template>
         </p-table>
     </div> -->
-</div>
-<div class="card" *ngIf="loading">
-    Loading...
 </div>

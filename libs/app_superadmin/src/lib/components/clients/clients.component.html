@@ -3,7 +3,7 @@
     <div class="font-semibold text-xl mb-4">
       <p-button (click)="addNewClient()" icon="pi pi-plus" label="Add New Client" [raised]="true" severity="info" />
     </div>
-    <p-table [value]="clients" [loading]="loading" [paginator]="true" [rows]="10">
+    <p-table [value]="clients" [loading]="loading" [paginator]="true" [rows]="20" showGridlines stripedRows size="small">
         <ng-template pTemplate="header">
           <tr>
             <th>ID</th>

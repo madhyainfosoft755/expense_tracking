@@ -56,7 +56,7 @@
       <!-- Date -->
       <div class="field col-span-12">
         <label class="block" for="date_received">Date</label>
-        <p-datepicker appendTo="body" id="date_received" placeholder="Date" formControlName="date_received" styleClass="w-full" dateFormat="dd-mm-yy"/>
+        <p-datepicker [maxDate]="today" appendTo="body" id="date_received" placeholder="Date" formControlName="date_received" styleClass="w-full" dateFormat="dd-mm-yy"/>
         <small *ngIf="amtReceivedFrom.get('date_received')?.invalid && amtReceivedFrom.get('date_received')?.touched" class="text-red-500">
           Date is required.
         </small>

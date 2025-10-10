@@ -4,7 +4,12 @@
       <p-button (click)="addNewAppSuperadmin()" icon="pi pi-plus" label="Add App Superadmin" [raised]="true" severity="info" />
     </div>
     <div>
-        <lib-user-details-table [users]="superadmins" [action]="false" [loading]="loading" (editUser)="onEmitSelectedUser($event)"></lib-user-details-table>
+        <lib-user-details-table 
+        [users]="superadmins" 
+        [action]="false" 
+        [loading]="loading" 
+        (pageChanged)="onPageChanged($event)"
+        (editUser)="onEmitSelectedUser($event)"></lib-user-details-table>
     </div>
 </div>
 
@@ -14,5 +19,6 @@
         [userDetails]="selectedUserDetails" 
         (closeUserDetails)="onCloseUserDetailsModel()" 
         (newUserDetails)="onNewUserDetailsEmit($event)"
+        [rolesArr]="[]"
         ></lib-user-manage>
 </p-dialog>

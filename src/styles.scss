@@ -5,3 +5,21 @@
 @use './demo/demo.scss';
 
 /* You can add global styles to this file, and also import other style files */
+
+.total-row {
+    background: #f3f6ff !important;       /* light bluish tint */
+    font-weight: 600 !important;
+    color: #5c85d6 !important;            /* darker blue text for contrast */
+    border-top: 2px solid #cfdcff !important;
+}
+.grand-total-row {
+    background: #f3f6ff !important;       /* light bluish tint */
+    font-weight: 600 !important;
+    color: #0b3d91 !important;            /* darker blue text for contrast */
+    border-top: 2px solid #cfdcff !important;
+}
+.grand-total-col {
+    background: #f3f6ff !important;
+    font-weight: 600 !important;
+    color: #0b3d91 !important;
+} 

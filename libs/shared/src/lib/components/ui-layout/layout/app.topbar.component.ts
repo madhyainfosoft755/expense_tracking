@@ -24,12 +24,12 @@ import { Store } from '@ngrx/store';
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
-                <img src="{{user.logo ? user.logo : 'et-logo.png'}}" alt="Expense Tracking" height="80" width="80" />
+                <img src="{{user.logo ? user.logo : 'et-logo.png'}}" alt="Expense Tracking" style="height: 56px; width: auto; max-height: 56px;" />
                 <!-- <span>MISTPL</span> -->
             </a>
         </div>
 
-        <div class="layout-topbar-actions">
+        <div class="layout-topbar-actions items-center">
             <!-- <div class="layout-config-menu">
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
@@ -54,7 +54,7 @@ import { Store } from '@ngrx/store';
                 <i class="pi pi-ellipsis-v"></i>
             </button> -->
 
-            <div *ngIf="user && user.role" class="flex items-center">
+            <div *ngIf="user && user.role">
                 <strong>{{ user.site_name ? user.site_name.trim() + ' - ': '' }}</strong> <strong class="text-green-500">{{user.role.replace("_", " ")}}</strong>
             </div>
 

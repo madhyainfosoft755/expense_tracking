@@ -66,7 +66,7 @@
       <!-- description -->
       <div class="field">
         <label class="block" for="description">Description</label>
-        <input id="description" placeholder="Received From User" pInputText formControlName="description" styleClass="w-full" />
+        <input id="description" placeholder="Description" pInputText formControlName="description" styleClass="w-full" />
         <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="p-error">
           Name is required and must be under 255 characters.
         </small>

@@ -13,24 +13,24 @@
     </div>
     <div class="col-span-12">
 
-        <p-table [value]="data" [loading]="loading" [paginator]="false">
+        <p-table [value]="data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false">
             <ng-template pTemplate="header">
                 <tr>
-                <th>SN</th>
-                <th>Expense Head</th>
-                <th *ngFor="let month of months">{{ month }}</th>
-                <th>Total</th>
+                    <th>SN</th>
+                    <th>Expense Head</th>
+                    <th *ngFor="let month of months">{{ month }}</th>
+                    <th class="grand-total-col">Grand Total</th>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-row let-i="rowIndex">
-                <tr>
-                <td>{{ i + 1 }}</td>
-                <td>{{ row.name }}</td>
-                <td *ngFor="let month of months">
-                    {{ row.total[month] || '' }}
-                </td>
-                <td>{{ row.total.GrandTotal }}</td>
+                <tr [ngClass]="{ 'grand-total-row': row.name?.toLowerCase() === 'grand total' }">
+                    <td>{{ row.name?.toLowerCase() === 'grand total' ? '' : i + 1 }}</td>
+                    <td>{{ row.name }}</td>
+                    <td *ngFor="let month of months">
+                        {{ row.total[month] || '' }}
+                    </td>
+                    <td class="grand-total-col">{{ row.total.GrandTotal }}</td>
                 </tr>
             </ng-template>
 

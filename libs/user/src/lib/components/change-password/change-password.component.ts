@@ -9,13 +9,14 @@ import { MessageModule } from 'primeng/message';
 
 
 import { UserService } from '../../services/user.service';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styles: ``,
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MessageModule, BreadcrumbModule, ButtonModule, FieldsetModule]
+  imports: [ReactiveFormsModule, CommonModule, MessageModule, PasswordModule, BreadcrumbModule, ButtonModule, FieldsetModule]
 })
 export class ChangePasswordComponent implements OnInit{
   changePasswordForm: FormGroup;

@@ -3,6 +3,9 @@
     <!-- <div class="font-semibold text-xl mb-4">
       <p-button (click)="addNewExpenseHead()" icon="pi pi-plus" label="Add New Expense Head" [raised]="true" severity="info" />
     </div> -->
+    @for (message of messages(); track message; let first = $first) {
+        <p-message [life]="message.life" closable [severity]="message.severity" [text]="message.content" styleClass="mb-2 mt-2" />
+    }
     <p-table #eht [value]="expenseHeads" showGridlines stripedRows size="small" [loading]="loading" [paginator]="true" [rows]="20"
         [globalFilterFields]="['name']">
         <ng-template #caption>
@@ -56,9 +59,12 @@
       <!-- Name -->
       <div class="field">
         <label class="block" for="name">Expense Head Name</label>
-        <input id="name" placeholder="Expense Head Name" pInputText formControlName="name" styleClass="w-full" />
-        <small *ngIf="expenseHeadForm.get('name')?.invalid && expenseHeadForm.get('name')?.touched" class="p-error">
+        <input id="name" placeholder="Expense Head Name" pInputText formControlName="name" styleClass="w-full" (input)="apiErrorMessage = ''" />
+        <small *ngIf="expenseHeadForm.get('name')?.invalid && expenseHeadForm.get('name')?.touched" class="text-red-500">
           Name is required and must be under 255 characters.
+        </small>
+        <small class="text-red-500" *ngIf="apiErrorMessage && !(expenseHeadForm.get('name')?.invalid && expenseHeadForm.get('name')?.touched)">
+          {{apiErrorMessage}}
         </small>
       </div>
   
@@ -90,7 +96,7 @@
 
     <!-- Submit -->
     <div class="field mt-3 text-right">
-      <p-button type="submit" label="Submit" [disabled]="expenseHeadForm.invalid" />
+      <p-button type="submit" [loading]="loadingEHEdit" label="Submit" [disabled]="expenseHeadForm.invalid" />
     </div>
 
   </form>

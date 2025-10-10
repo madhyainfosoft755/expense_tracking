@@ -4,6 +4,9 @@
       <p-button (click)="addNewSite()" icon="pi pi-plus" label="Add New Site" [raised]="true" severity="info" />
     </div> -->
     <div>
+        @for (message of messages(); track message; let first = $first) {
+            <p-message [life]="message.life" closable [severity]="message.severity" [text]="message.content" styleClass="mb-2 mt-2" />
+        }
         <p-table #siteTable [value]="siteData" showGridlines stripedRows size="small" [loading]="loading" [paginator]="true" [rows]="20"
             [globalFilterFields]="['name']">
             <ng-template #caption>
@@ -62,7 +65,7 @@
             </div>
         </div>
         <div class="field mt-3 text-right">
-            <p-button type="submit" label="{{selectedSite ? 'Update' : 'Add'}}" [disabled]="siteForm.invalid" />
+            <p-button [loading]="addUpdateLoading" type="submit" label="{{selectedSite ? 'Update' : 'Add'}}" [disabled]="siteForm.invalid" />
         </div>
     </form>
 </p-dialog>

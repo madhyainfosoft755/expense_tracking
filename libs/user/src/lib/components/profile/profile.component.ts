@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -10,13 +10,15 @@ import { SelectModule } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
 
 import { UserService } from '../../services/user.service';
+import { InputTextModule } from 'primeng/inputtext';
+import { HelperSharedService } from '@shared';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styles: ``,
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MessageModule, SelectModule, BreadcrumbModule, ButtonModule, ProgressSpinnerModule, FieldsetModule]
+  imports: [ReactiveFormsModule, CommonModule, InputTextModule, MessageModule, SelectModule, BreadcrumbModule, ButtonModule, ProgressSpinnerModule, FieldsetModule]
 })
 export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
@@ -36,15 +38,19 @@ export class ProfileComponent implements OnInit {
     { label: 'Prof.', value: 'Prof.' }
   ];
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(
+    private fb: FormBuilder, 
+    private userService: UserService,
+    private helperSharedService: HelperSharedService) {
     this.profileForm = this.fb.group(
       {
         // salutation: ['Mr.', Validators.required],
-        first_name: ['', Validators.required],
-        last_name: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        username: ['', Validators.required],
-        mobile_number: ['', Validators.required],
+        first_name: ['', [Validators.required, Validators.maxLength(255)]],
+        last_name: ['', [Validators.required, Validators.maxLength(255)]],
+        email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+        username: ['', [Validators.required, Validators.maxLength(255)]],
+        // employee_id: ['', [Validators.maxLength(25)]],
+        mobile_number: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]{10}$')]],
       }
     );
   }
@@ -75,6 +81,7 @@ export class ProfileComponent implements OnInit {
           email: res.email,
           username: res.username,
           mobile_number: res.mobile_number,
+          // employee_id: res.employee_id,
         });
         this.loadingProfile = false;
       }, 
@@ -83,6 +90,11 @@ export class ProfileComponent implements OnInit {
         console.log(err);
       }
     });
+  }
+
+  checkPhone(controlName: string) {
+      const control: AbstractControl<any, any> | null = this.profileForm.get(controlName);
+      this.helperSharedService.checkPhone(control);
   }
 
   // Submit Form

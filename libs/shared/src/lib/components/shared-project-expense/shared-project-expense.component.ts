@@ -85,7 +85,7 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
     private helperSharedService: HelperSharedService
   ) {
     this.amtReceivedFrom = this.fb.group({
-      date: [null, [Validators.required]],
+      date: [this.today, [Validators.required]],
       amount: ['', [Validators.required, Validators.min(1)]],
       expense_head: ['', [Validators.required]],
       description: [''],
@@ -257,7 +257,7 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
       formData.append('bill_image', this.billImageFile);
     }
     this.confirmationService.confirm({
-      message: 'Are you sure you want to change this status?',
+      message: 'Are you sure you want to add this expense?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

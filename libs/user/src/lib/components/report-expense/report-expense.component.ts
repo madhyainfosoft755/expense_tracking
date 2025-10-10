@@ -45,6 +45,7 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
   amtReceivedFrom: FormGroup;
   loadAdding = false;
   expenseHeads: any[] = [];
+  globalError = '';
 
   currentUser$: Observable<any | null>;
   rolesArr: string[] = ['SUPERADMIN', 'ADMIN'];
@@ -79,7 +80,7 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
     private helperSharedService: HelperSharedService
   ) {
     this.amtReceivedFrom = this.fb.group({
-      date: [null, [Validators.required]],
+      date: [this.today, [Validators.required]],
       amount: ['', [Validators.required, Validators.min(1)]],
       expense_head: ['', [Validators.required]],
       vendor_name: [''],
@@ -234,7 +235,7 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
       formData.append('bill_image', this.billImageFile);
     }
     this.confirmationService.confirm({
-      message: 'Are you sure you want to change this status?',
+      message: 'Are you sure you want to add this expense?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -256,11 +257,32 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
             error: (err: any) => {
               console.error('Error in expense head:', err);
               this.loadAdding = false;
+
+              if (err.status === 400 && err.error) {
+                this.applyServerErrors(err.error);
+              }
             }
         });
       },
       reject: () => {
         // Nothing needed, the UI stays the same
+      }
+    });
+  }
+
+  applyServerErrors(errors: any) {
+    Object.keys(errors).forEach(field => {
+      const control = this.amtReceivedFrom.get(field);
+
+      if (control) {
+        control.setErrors({
+          serverError: Array.isArray(errors[field]) ? errors[field][0] : errors[field]
+        });
+        control.markAsTouched();
+      } else if (field === 'non_field_errors') {
+        this.globalError = errors[field].join(', ');
+      } else {
+        console.warn(`Server error for unknown field: ${field}`, errors[field]);
       }
     });
   }

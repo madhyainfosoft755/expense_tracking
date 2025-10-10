@@ -22,6 +22,7 @@ export class SuperadminsComponent implements OnInit {
     loading = false;
     selectedUserDetails: any;
     visibleUserManageDialog = false;
+    page = 1;
 
     constructor(
         private appSuperAdminService: AppSuperAdminService,
@@ -35,9 +36,9 @@ export class SuperadminsComponent implements OnInit {
         this.loadAllSuperadmins();
     }
 
-    loadAllSuperadmins(){
+    loadAllSuperadmins(page=1, params = {}){
         this.loading = true;
-        this.appSuperAdminService.getAppSuperadminList()
+        this.appSuperAdminService.getAppSuperadminList(page, params)
         .subscribe({
             next: (data) => {
                 this.superadmins = data;
@@ -52,6 +53,14 @@ export class SuperadminsComponent implements OnInit {
 
     addNewAppSuperadmin(){
         this.visibleUserManageDialog = true;
+    }
+
+    onPageChanged(val: any){
+        console.log(val)
+        if(val){
+            this.page = val;
+            this.loadAllSuperadmins(val)
+        }
     }
 
     onEmitSelectedUser(user: any){

@@ -75,30 +75,37 @@
 </div>
   
 <p-confirmDialog></p-confirmDialog>
-<p-dialog header="Add New" (onHide)="cancelEHEditModal()" [(visible)]="displayEHEditModal" [modal]="true" [closable]="true"  [style]="{width: '300px'}">
+<p-dialog header="Add New" (onHide)="cancelEHEditModal()" [(visible)]="displayEHEditModal" [modal]="true" [closable]="true"  [style]="{width: '40vw'}">
   <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()" class="p-fluid">
-    <div class="grid grid-cols-2 gap-6">
+    <div *ngIf="globalError" class="text-red-500 mb-2">{{ globalError }}</div>
+    <div class="grid grid-cols-12 gap-6">
 
       <!-- Date -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6">
         <label class="block" for="date">Date</label>
-        <p-datepicker id="date" appendTo="body" placeholder="Date" formControlName="date" styleClass="w-full" dateFormat="dd-mm-yy"/>
+        <p-datepicker [maxDate]="today" [showIcon]="true" id="date" appendTo="body" placeholder="Date" formControlName="date" styleClass="w-full" dateFormat="dd-mm-yy"/>
         <small *ngIf="amtReceivedFrom.get('date')?.invalid && amtReceivedFrom.get('date')?.touched" class="text-red-500">
           Date is required.
         </small>
       </div>
 
       <!-- Amount -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6 ">
         <label class="block" for="amount">Amount</label>
         <input id="amount" placeholder="Amount" pInputText formControlName="amount" class="w-full" (input)="checkAmountInput2('amount')" />
-        <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="text-red-500">
-          Amount is required.
+        <small *ngIf="amtReceivedFrom.get('amount')?.hasError('required') && amtReceivedFrom.get('amount')?.touched"
+         class="text-red-500">Amount is required.</small>
+
+        <small *ngIf="amtReceivedFrom.get('amount')?.hasError('min') && amtReceivedFrom.get('amount')?.touched"
+         class="text-red-500">Amount must be greater than 0.</small>
+        <small *ngIf="amtReceivedFrom.get('amount')?.hasError('serverError')"
+              class="text-red-500">
+          {{ amtReceivedFrom.get('amount')?.getError('serverError') }}
         </small>
       </div>
 
       <!-- Vendor name -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6 ">
           <label for="vendor_name" class="block">Vendor Name</label>
           <input
           id="vendor_name"
@@ -113,17 +120,9 @@
           </small> -->
       </div>
 
-      <!-- description -->
-      <div class="field col-span-12">
-        <label class="block" for="description">Description</label>
-        <input id="description" placeholder="Received From User" pInputText formControlName="description" class="w-full" />
-        <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="text-red-500">
-          Description is required.
-        </small>
-      </div>
-  
+      
       <!-- Expense Head -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6 ">
         <label class="block" for="expense_head">Expense Head</label>
         <p-select 
             [options]="expenseHeads" 
@@ -141,8 +140,17 @@
         </small>
       </div>
 
+      <!-- description -->
+      <div class="field col-span-12 md:col-span-6 ">
+        <label class="block" for="description">Description</label>
+        <input id="description" placeholder="Description" pInputText formControlName="description" class="w-full" />
+        <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="text-red-500">
+          Description is required.
+        </small>
+      </div>
+
       <!-- Bill Image Upload -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6 ">
         <label for="bill_image">Upload Bill Image</label>
         <input
           type="file"

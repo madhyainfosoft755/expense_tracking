@@ -7,6 +7,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class ApiService {
   private readonly http = inject(HttpClient);
    headers: HttpHeaders;
+   apiURL = 'http://127.0.0.1:8000/api/';
 
    setParams(data: any): HttpParams {
     let httpParams = new HttpParams();
@@ -22,12 +23,12 @@ export class ApiService {
   get<T>(url: string, params: any = {}, headers: HttpHeaders|null=null): Observable<T> {
     const newParams: HttpParams = this.setParams(params);
      if(headers === null){
-       return this.http.get<T>('http://127.0.0.1:8000/api/'+url, {
+       return this.http.get<T>(this.apiURL+url, {
          headers: this.headers,
          params: newParams
        });
      } else {
-      return this.http.get<T>('http://127.0.0.1:8000/api/'+url, {
+      return this.http.get<T>(this.apiURL+url, {
         headers: headers,
         params: newParams
       });
@@ -37,12 +38,12 @@ export class ApiService {
   getRaw<T>(url: string, params: HttpParams = new HttpParams(), headers: HttpHeaders|null=null): Observable<T> {
     
     if(headers === null){
-      return this.http.get<T>('http://127.0.0.1:8000/api/'+url, {
+      return this.http.get<T>(this.apiURL+url, {
         headers: this.headers,
         params,
       });
     } else {
-     return this.http.get<T>('http://127.0.0.1:8000/api/'+url, {
+     return this.http.get<T>(this.apiURL+url, {
        headers: headers,
        params,
      });
@@ -52,9 +53,9 @@ export class ApiService {
   post<T, D>(url: string, data?: D, headers: HttpHeaders|null=null,  skipEncrytion = false): Observable<T> {
     
     if(headers === null){
-      return this.http.post<T>('http://127.0.0.1:8000/api/'+url, data);
+      return this.http.post<T>(this.apiURL+url, data);
     }
-    return this.http.post<T>('http://127.0.0.1:8000/api/'+url, data, {headers});
+    return this.http.post<T>(this.apiURL+url, data, {headers});
   }
 
   postRaw<T, D>(url: string, data?: D, headers: HttpHeaders|null=null,  skipEncrytion = false): Observable<T> {
@@ -70,17 +71,17 @@ export class ApiService {
       'X-APPToken': userId
      })
      
-    return this.http.post<T>('http://127.0.0.1:8000/api/'+url, data, {headers});
+    return this.http.post<T>(this.apiURL+url, data, {headers});
   }
 
   put<T, D>(url: string, data: D ): Observable<T> {
     
-    return this.http.put<T>('http://127.0.0.1:8000/api/'+url, data);
+    return this.http.put<T>(this.apiURL+url, data);
   }
 
   patch<T, D>(url: string, data: D ): Observable<T> {
     
-    return this.http.patch<T>('http://127.0.0.1:8000/api/'+url, data);
+    return this.http.patch<T>(this.apiURL+url, data);
   }
 
   delete<T, D>(url: string, data?: D ): Observable<T> {
@@ -88,14 +89,14 @@ export class ApiService {
       headers: this.headers,
       body: data };
     
-    return this.http.delete<T>('http://127.0.0.1:8000/api/'+url, options);
+    return this.http.delete<T>(this.apiURL+url, options);
   }
   postFormData<T, D>(url: string, data?: D ): Observable<T> {
     const headers = new HttpHeaders({
       'Accept': '*/*',
     });
     
-    return this.http.post<T>('http://127.0.0.1:8000/api/'+url, data, { headers: headers });
+    return this.http.post<T>(this.apiURL+url, data, { headers: headers });
   }
 
   postNewFormData<T, D, S>(url: string, data?: D,  additionalData? :S ): Observable<T> {
@@ -107,7 +108,7 @@ export class ApiService {
       requestdata : additionalData
     }
     
-    return this.http.post<T>('http://127.0.0.1:8000/api/'+url, dataObj, { headers: headers });
+    return this.http.post<T>(this.apiURL+url, dataObj, { headers: headers });
   }
 
   constructor() {

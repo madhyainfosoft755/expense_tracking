@@ -15,8 +15,8 @@ export class AppSuperAdminService {
     return this.apiService.get(this.prefix+'get-dashboard-data/');
   }
 
-  addClient(data: any): Observable<any> {
-    return this.apiService.post(this.prefix+'clients', data);
+  addClient(data: FormData): Observable<any> {
+    return this.apiService.post(this.prefix+'clients/', data);
   }
 
   updateClient(client_id: string, data: FormData): Observable<any> {
@@ -36,8 +36,8 @@ export class AppSuperAdminService {
     return this.apiService.get(this.prefix+'clients-list/');
   }
 
-  getAppSuperadminList(): Observable<any> {
-    return this.apiService.get(this.prefix+'app-superadmins/');
+  getAppSuperadminList(page =1, params: any = {}): Observable<any> {
+    return this.apiService.get(this.prefix+'list-app-superadmins/', {...params, page: page});
   }
 
   addNewAppSuperadmin(user: any): Observable<any> {

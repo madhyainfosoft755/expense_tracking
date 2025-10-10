@@ -27,53 +27,53 @@
                   
                       <!-- First Name -->
                       <div class="field col-span-12 sm:col-span-4">
-                        <label for="first-name" class="mr-2">First Name <span class="text-red-500">*</span></label>
-                        <input id="first-name" type="text" pInputText formControlName="first_name" placeholder="Firstame" />
+                        <label for="first-name" class="mr-2 block">First Name <span class="text-red-500">*</span></label>
+                        <input id="first-name" type="text" maxlength="255" pInputText formControlName="first_name" placeholder="First Name" />
                         <small *ngIf="submitted && profileForm.controls['first_name'].invalid" class="p-error">
-                          Name is required.
+                          First name is required and must be under 255 characters.
                         </small>
                       </div>
 
                       <!-- Last Name -->
                       <div class="field col-span-12 sm:col-span-4">
-                        <label for="last-name" class="mr-2">Last Name <span class="text-red-500">*</span></label>
-                        <input id="last-name" type="text" pInputText formControlName="last_name" placeholder="Last Name" />
+                        <label for="last-name" class="mr-2 block">Last Name <span class="text-red-500">*</span></label>
+                        <input id="last-name" type="text" maxlength="255" pInputText formControlName="last_name" placeholder="Last Name" />
                         <small *ngIf="submitted && profileForm.controls['last_name'].invalid" class="p-error">
-                          Name is required.
+                          Last name is required and must be under 255 characters.
                         </small>
                       </div>
                   
                       <!-- Email -->
                       <div class="field col-span-12 sm:col-span-4">
-                        <label for="email" class="mr-2">Email <span class="text-red-500">*</span></label>
-                        <input id="email" type="email" pInputText formControlName="email" placeholder="Enter Email" />
+                        <label for="email" class="mr-2 block">Email <span class="text-red-500">*</span></label>
+                        <input id="email" type="email" maxlength="255" pInputText formControlName="email" placeholder="Enter Email" />
                         <small *ngIf="submitted && profileForm.controls['email'].invalid" class="p-error">
-                          Valid Email is required.
+                          Email is required and must be under 255 characters.
                         </small>
                       </div>
                   
                       <!-- Username -->
                       <div class="field col-span-12 sm:col-span-4">
-                        <label for="username" class="mr-2">Username <span class="text-red-500">*</span></label>
-                        <input id="username" type="text" pInputText formControlName="username" placeholder="Enter Username" />
+                        <label for="username" class="mr-2 block">Username <span class="text-red-500">*</span></label>
+                        <input id="username" type="text" maxlength="255" pInputText formControlName="username" placeholder="Enter Username" />
                         <small *ngIf="submitted && profileForm.controls['username'].invalid" class="p-error">
-                          Username is required.
+                          Username is required and must be under 255 characters.
                         </small>
                       </div>
 
                       <!-- Mobile Number -->
                       <div class="field col-span-12 sm:col-span-4">
-                        <label for="mobile_number" class="mr-2">Mobile Number <span class="text-red-500">*</span></label>
-                        <input id="mobile_number" type="text" pInputText formControlName="mobile_number" placeholder="Enter Mobile Number" />
+                        <label for="mobile_number" class="mr-2 block">Mobile Number <span class="text-red-500">*</span></label>
+                        <input id="mobile_number" type="text" maxlength="10" (input)="checkPhone('mobile_number')" pInputText formControlName="mobile_number" placeholder="Enter Mobile Number" />
                         <small *ngIf="submitted && profileForm.controls['mobile_number'].invalid" class="p-error">
-                          Mobile Number is required.
+                          Mobile number is required and must be under 10 characters.
                         </small>
                       </div>
 
                       <!-- Employee ID -->
                       <div class="field col-span-12 sm:col-span-4" *ngIf="user && user.employee_id">
-                        <label for="employee_id" class="mr-2">Employee Id <span class="text-red-500">*</span></label>
-                        <input [disabled]="true" id="employee_id" [value]="user.employee_id" type="text" pInputText formControlName="employee_id" placeholder="Enter Employee ID" />
+                        <label for="employee_id" class="mr-2 block">Employee Id <span class="text-red-500">*</span></label>
+                        <input [disabled]="true" id="employee_id" [value]="user.employee_id" type="text" maxlength="25" pInputText placeholder="Enter Employee ID" />
                       </div>
                         
                     </div>
@@ -81,7 +81,7 @@
                         <p-button type="submit" [loading]="loading" pRipple [disabled]="profileForm.invalid || loading" label="Update" class="" />
                         <div *ngIf="loadingProfile" class="ml-3">
                             <p-progressSpinner 
-                                    styleClass="w-2rem h-2rem"  />
+                                    styleClass="w-1rem h-1rem"  />
                         </div>
                     </div>
                 </form>

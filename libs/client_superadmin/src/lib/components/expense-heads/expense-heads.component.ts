@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -18,6 +18,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { ClientSuperAdminService } from '../../services/client-superadmin.service';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 
 interface OfficeLocation{
   id:number;
@@ -40,7 +41,7 @@ interface ExpenseHead {
   selector: 'app-client-superadmin-eh-list',
   templateUrl: './expense-heads.component.html',
   standalone: true,
-  imports: [CommonModule, TableModule, IconFieldModule, InputIconModule, FormsModule, MultiSelectModule, ReactiveFormsModule, DialogModule, InputTextModule, ToggleSwitchModule, TagModule, ConfirmDialogModule, BreadcrumbModule, ButtonModule],
+  imports: [CommonModule, TableModule, MessageModule, IconFieldModule, InputIconModule, FormsModule, MultiSelectModule, ReactiveFormsModule, DialogModule, InputTextModule, ToggleSwitchModule, TagModule, ConfirmDialogModule, BreadcrumbModule, ButtonModule],
   providers: [ConfirmationService, MessageService],
   styles: ``
 })
@@ -55,6 +56,13 @@ export class ExpenseHeadsComponent implements OnInit {
   selectedExpenseHead: ExpenseHead | null = null;
   serverUrl: string;
   sites: OfficeLocation[] = [];
+  apiErrorMessage : string | null = '';
+  messages = signal<any[]>([]);
+
+  addMessages(message: { severity: string, content: string, life: number }) {
+      this.messages.set([message]);
+      // this.messages.set([ ...this.messages(), message]);
+  }
 
 
   constructor(
@@ -134,26 +142,35 @@ export class ExpenseHeadsComponent implements OnInit {
       this.expenseHeadForm.markAllAsTouched();
       return;
     }
+    const msgCnf = this.selectedExpenseHead ? 
+      'Are you sure you want to update this expense head?' : 
+      'Are you sure you want to add this expense head?';
     this.confirmationService.confirm({
-      message: 'Are you sure you want to change this status?',
+      message: msgCnf,
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.loadingEHEdit = true;
+        this.apiErrorMessage = '';
         const expenseHeadSub = this.selectedExpenseHead ? 
         this.clientSuperAdminService.updateExpenseHeads(this.selectedExpenseHead?.id.toString() ?? '0', this.expenseHeadForm.value) : 
         this.clientSuperAdminService.createExpenseHeads({name: this.expenseHeadForm.value.name, office_locations: this.expenseHeadForm.value.office_locations});
         expenseHeadSub
           .subscribe({
-            next: () => {
-              this.selectedExpenseHead = null;
+            next: (response: any) => {
               this.displayEHEditModal = false;
+              const msg = this.selectedExpenseHead ? 'Expense head updated successfully.' : 'Expense head added successfully.';
+              this.selectedExpenseHead = null;
               this.loadingEHEdit = false;
+              this.addMessages({ severity: 'success', content: response?.message ?? msg, life: 30000 });
               this.loadExpenseHeads();
             },
             error: (err: any) => {
               console.error('Error in expense head:', err);
+              this.apiErrorMessage = err?.error?.name ?? (this.selectedExpenseHead ? "Unable to update expense head." : "Unable to add expense head.");
               this.loadingEHEdit = false;
+              const msg = this.selectedExpenseHead ? 'Unable to update ecpense head.' : 'Unable to add expense head.';
+              this.addMessages({ severity: 'error', content: err?.error?.error ?? msg, life: 30000 });
             }
         });
       },

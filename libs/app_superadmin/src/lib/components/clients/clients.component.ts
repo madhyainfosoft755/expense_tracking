@@ -167,7 +167,7 @@ export class ClientComponent implements OnInit {
     console.log(formData);
     // return;
     this.confirmationService.confirm({
-      message: 'Are you sure you want to change this status?',
+      message: 'Are you sure you want to update this client information?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

@@ -72,7 +72,7 @@
     </div>
 </div>
 
-<p-dialog header="Edit User Details" (onHide)="onCloseUserDetailsModel()" [(visible)]="visibleUserManageDialog" [modal]="true" [closable]="true"  [style]="{width: '700px'}">
+<p-dialog header="{{ selectedUserDetails ? 'Edit User Details' : 'Add New User' }}" (onHide)="onCloseUserDetailsModel()" [(visible)]="visibleUserManageDialog" [modal]="true" [closable]="true"  [style]="{width: '700px'}">
     <lib-user-manage 
         *ngIf="visibleUserManageDialog" 
         [userRole]="userRole"

@@ -76,7 +76,7 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
     private helperSharedService: HelperSharedService
   ) {
     this.amtReceivedFrom = this.fb.group({
-      date_received: [null, [Validators.required]],
+      date_received: [this.today, [Validators.required]],
       amount: ['', [Validators.required, Validators.min(1)]],
       received_from_user: [''],
       received_from_name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
@@ -224,7 +224,7 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
       return;
     }
     this.confirmationService.confirm({
-      message: 'Are you sure you want to change this status?',
+      message: 'Are you sure you want to add this amount?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

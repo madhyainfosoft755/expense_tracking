@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RouterModule } from '@angular/router';
@@ -16,21 +16,25 @@ import { InputIconModule } from 'primeng/inputicon';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-site',
   templateUrl: './site.component.html',
   standalone: true,
   providers: [ConfirmationService],
-  imports: [CommonModule, BreadcrumbModule, TagModule, FormsModule, ConfirmDialogModule, ToggleSwitchModule, IconFieldModule, InputIconModule, InputTextModule, ReactiveFormsModule, DialogModule, ButtonModule, TableModule, RouterModule, SkeletonModule]
+  imports: [CommonModule, BreadcrumbModule, MessageModule, TagModule, FormsModule, ConfirmDialogModule, ToggleSwitchModule, IconFieldModule, InputIconModule, InputTextModule, ReactiveFormsModule, DialogModule, ButtonModule, TableModule, RouterModule, SkeletonModule]
 })
 export class SiteComponent implements OnInit {
   siteData: any = null;
   loading = true;
+  addUpdateLoading = false;
+  updatingPriorityLoading = false;
   breadcrumbItems: any[] = [];
   visibleSiteManageDialog = false;
   selectedSite: any = null;
   siteForm: FormGroup;
+  messages = signal<any[]>([]);
 
   constructor(
     private clientSuperAdminService: ClientSuperAdminService,
@@ -49,6 +53,11 @@ export class SiteComponent implements OnInit {
         { label: 'Site List' }
     ];
     this.getSiteList();
+  }
+
+  addMessages(message: { severity: string, content: string, life: number }) {
+      this.messages.set([message]);
+      // this.messages.set([ ...this.messages(), message]);
   }
 
   getSiteList(){
@@ -87,36 +96,46 @@ export class SiteComponent implements OnInit {
 
   onSubmitSiteManageForm(){
     if(this.selectedSite){
+      this.addUpdateLoading = true;
       this.clientSuperAdminService.updateSite(this.selectedSite.id, {name: this.siteForm.value.name})
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             console.log('Site updated successfully:', response);
             this.onCloseSiteDetailsModel();
+            this.addMessages({ severity: 'success', content: response?.message ?? 'Site Updated Successfully.', life: 30000 });
+            this.addUpdateLoading = false;
             this.getSiteList(); // Refresh the site list
           },
           error: (error) => {
             console.error('Error updating site:', error);
+            this.addMessages({ severity: 'error', content: error?.error?.error ?? 'Unable to update site.', life: 30000 });
+            this.addUpdateLoading = false;
           }
         });
     } else {
+      this.addUpdateLoading = true;
       this.clientSuperAdminService.addNewSite({name: this.siteForm.value.name})
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             console.log('New site added successfully:', response);
             this.onCloseSiteDetailsModel();
+            this.addMessages({ severity: 'success', content: response?.message ?? 'Site Added Successfully.', life: 30000 });
+            this.addUpdateLoading = false;
             this.getSiteList(); // Refresh the site list
           },
           error: (error) => {
             console.error('Error adding new site:', error);
+            this.addMessages({ severity: 'error', content: error?.error?.error ?? 'Unable to add site.', life: 30000 });
+            this.addUpdateLoading = false;
           }
         });
     }
   }
 
   changeSitePriority(site: any){
-    console.log(site)
+    if(site.priority){ return; }
     this.confirmationService.confirm({
-        message: `Now ${site.name} is on priority. Are you sure want to change site priority?`,
+      message: `Now ${site.name} is on priority. Are you sure want to change site priority?`,
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         acceptIcon:"none",
@@ -124,14 +143,19 @@ export class SiteComponent implements OnInit {
         rejectButtonStyleClass:"p-button",
         acceptButtonStyleClass: 'p-button-outlined',
         accept: () => {
+            this.loading = true;
             this.clientSuperAdminService.updateSitePriority(site.id)
               .subscribe({
-                next: (response) => {
+                next: (response: any) => {
                   console.log('Site priority updated successfully:', response);
+                  this.loading = false;
+                  this.addMessages({ severity: 'success', content: response?.message ?? 'Site Priority Changed Successfully.', life: 30000 });
                   this.getSiteList(); // Refresh the site list
                 },
                 error: (error) => {
                   console.error('Error updating site priority:', error);
+                  this.addMessages({ severity: 'error', content: error?.error?.error ?? 'Unable to update site priority.', life: 30000 });
+                  this.loading = false
                   // this.siteData = structuredClone(this.siteData);
                   // this.cdr.detectChanges();
                 }

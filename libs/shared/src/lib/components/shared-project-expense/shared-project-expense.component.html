@@ -81,48 +81,39 @@
 </div>
   
 <p-confirmDialog></p-confirmDialog>
-<p-dialog header="Add New" (onHide)="cancelEHEditModal()" [(visible)]="displayEHEditModal" [modal]="true" [closable]="true" [style]="{width: '300px'}">
+<p-dialog header="Add New" (onHide)="cancelEHEditModal()" [(visible)]="displayEHEditModal" [modal]="true" [closable]="true" [style]="{width: '40vw'}">
   <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()" class="p-fluid">
-    <div class="grid grid-cols-2 gap-6">
+    <div class="grid grid-cols-12 gap-6">
 
       <!-- Date -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6">
         <label class="block" for="date">Date</label>
-        <p-datepicker id="date" appendTo="body" placeholder="Date" formControlName="date" styleClass="w-full" dateFormat="dd-mm-yy"/>
-        <small *ngIf="amtReceivedFrom.get('date')?.invalid && amtReceivedFrom.get('date')?.touched" class="p-error">
-          Date is required and must be under 255 characters.
+        <p-datepicker [maxDate]="today"  id="date" appendTo="body" placeholder="Date" formControlName="date" styleClass="w-full" dateFormat="dd-mm-yy"/>
+        <small *ngIf="amtReceivedFrom.get('date')?.invalid && amtReceivedFrom.get('date')?.touched" class="text-red-500">
+          Date is required.
         </small>
       </div>
 
       <!-- Amount -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6">
         <label class="block" for="amount">Amount</label>
         <input id="amount" placeholder="Amount" pInputText formControlName="amount" class="w-full" (input)="checkAmountInput2('amount')" />
-        <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="p-error">
+        <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="text-red-500">
           Amount is required.
         </small>
       </div>
 
       <!-- Vendor -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6">
         <label class="block" for="vendor_name">Vendor Name</label>
         <input id="vendor_name" placeholder="Vendor Name" pInputText formControlName="vendor_name" class="w-full" />
-        <small *ngIf="amtReceivedFrom.get('vendor_name')?.invalid && amtReceivedFrom.get('vendor_name')?.touched" class="p-error">
+        <small *ngIf="amtReceivedFrom.get('vendor_name')?.invalid && amtReceivedFrom.get('vendor_name')?.touched" class="text-red-500">
           Vendor Name is required.
         </small>
       </div>
 
-      <!-- description -->
-      <div class="field col-span-12">
-        <label class="block" for="description">Description</label>
-        <input id="description" placeholder="Received From User" pInputText formControlName="description" class="w-full" />
-        <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="p-error">
-          Name is required and must be under 255 characters.
-        </small>
-      </div>
-  
       <!-- Expense Head -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6">
         <label class="block" for="expense_head">Expense Head</label>
         <p-select 
             [options]="expenseHeads" 
@@ -135,13 +126,22 @@
             [filter]="true" 
             filterBy="name"  />
 
-        <small *ngIf="amtReceivedFrom.get('expense_head')?.invalid && amtReceivedFrom.get('expense_head')?.touched" class="p-error">
-          User is required.
+        <small *ngIf="amtReceivedFrom.get('expense_head')?.invalid && amtReceivedFrom.get('expense_head')?.touched" class="text-red-500">
+          Expense head is required.
+        </small>
+      </div>
+
+      <!-- description -->
+      <div class="field col-span-12 md:col-span-6">
+        <label class="block" for="description">Description</label>
+        <input id="description" placeholder="Description" pInputText formControlName="description" class="w-full" />
+        <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="text-red-500">
+          Name is required and must be under 255 characters.
         </small>
       </div>
 
       <!-- Bill Image Upload -->
-      <div class="field col-span-12">
+      <div class="field col-span-12 md:col-span-6">
         <label for="bill_image">Upload Bill Image</label>
         <input
           type="file"
@@ -150,7 +150,7 @@
           (change)="onFileSelected($event)"
           class="w-full border p-2 rounded"
         />
-        <small *ngIf="imageError" class="p-error">{{ imageError }}</small>
+        <small *ngIf="imageError" class="text-red-500">{{ imageError }}</small>
       </div>
     </div>
 

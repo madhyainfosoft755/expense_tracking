@@ -130,6 +130,23 @@ export class HelperSharedService {
         return control;
     }
 
+    checkPhone(control: AbstractControl<any, any> | null): AbstractControl<any, any> | null {
+        let value = control?.value;
+        if (value !== null && value !== undefined) {
+            // Convert to string
+            value = value.toString();
+
+            // Allow only digits and one decimal point
+            const cleanedValue = value.replace(/[^0-9]/g, '');
+
+            const formattedValue = cleanedValue.substring(0, 10); // Limit to 10 digit
+
+            control?.setValue(formattedValue, { emitEvent: false });
+            return control;
+        }
+        return control;
+    }
+
     generateDisabledDates(selectedYear: number, selectedMonths: number[]): Date[] {
         const disabledDates: Date[] = [];
         const start = new Date(selectedYear, 0, 1); // Jan 1, 2025

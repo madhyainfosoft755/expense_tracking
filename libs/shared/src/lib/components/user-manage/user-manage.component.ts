@@ -10,13 +10,15 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { CommonAPIService } from '../../services/common-api.service';
+import { HelperSharedService } from '../../services/helper-shared.service';
+import { PasswordModule } from 'primeng/password';
 
 
 @Component({
   selector: 'lib-user-manage',
   templateUrl: './user-manage.component.html',
   standalone: true,
-  imports: [CommonModule, PanelModule, TableModule, SelectModule, MessageModule, ReactiveFormsModule, ButtonModule, ToggleSwitchModule, InputTextModule ]
+  imports: [CommonModule, PanelModule, TableModule, PasswordModule, SelectModule, MessageModule, ReactiveFormsModule, ButtonModule, ToggleSwitchModule, InputTextModule ]
 })
 export class UserManageComponent implements OnInit, OnChanges {
     @Input() userDetails: any | undefined;
@@ -34,20 +36,26 @@ export class UserManageComponent implements OnInit, OnChanges {
 
     constructor(
         private fb: FormBuilder,
-        private commonApiService: CommonAPIService
+        private commonApiService: CommonAPIService,
+        private helperSharedService: HelperSharedService
     ) {
         this.userForm = this.fb.group({
             username:     ['', [Validators.required, Validators.maxLength(255)]],
             first_name:   ['', [Validators.required, Validators.maxLength(255)]],
             last_name:    ['', [Validators.required, Validators.maxLength(255)]],
             email:        ['', [Validators.required, Validators.maxLength(255)]],
-            mobile_number:['', [Validators.required, Validators.maxLength(10)]],
+            mobile_number:['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]{10}$')]],
             employee_id:  [''],
             allow_verify_cashbook_expense: [false, Validators.required],
             allow_verify_reimbursement_expense: [false, Validators.required],
         });
 
         
+    }
+
+    checkPhone(controlName: string) {
+        const control: AbstractControl<any, any> | null = this.userForm.get(controlName);
+        this.helperSharedService.checkPhone(control);
     }
 
     ngOnInit(): void {
@@ -163,11 +171,11 @@ export class UserManageComponent implements OnInit, OnChanges {
             if (!this.userForm.contains('password')) {
                 this.userForm.addControl(
                 'password',
-                new FormControl('', [Validators.required, Validators.maxLength(255)])
+                new FormControl('', [Validators.required, Validators.maxLength(60), Validators.minLength(6)])
                 );
                 this.userForm.addControl(
                 'confirm_password',
-                new FormControl('', [Validators.required, Validators.maxLength(255)])
+                new FormControl('', [Validators.required, Validators.maxLength(60), Validators.minLength(6)])
                 );
             }
 

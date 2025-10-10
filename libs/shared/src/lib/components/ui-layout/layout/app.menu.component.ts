@@ -177,8 +177,8 @@ export class AppMenuComponent implements OnInit, OnDestroy {
             {
                 label: 'Masters',
                 items: [
-                    { label: 'Superadmin', icon: 'pi pi-fw pi-home', routerLink: [`/app-superadmin/superadmins`] },
-                    { label: 'Client', icon: 'pi pi-fw pi-home', routerLink: [`/app-superadmin/clients`] }
+                    { label: 'Superadmin', icon: 'pi pi-fw pi-users', routerLink: [`/app-superadmin/superadmins`] },
+                    { label: 'Client', icon: 'pi pi-fw pi-building', routerLink: [`/app-superadmin/clients`] }
                 ]
             },
         ];

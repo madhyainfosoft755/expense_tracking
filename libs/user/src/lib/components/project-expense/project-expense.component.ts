@@ -220,7 +220,7 @@ export class ProjectExpenseComponent implements OnInit, OnDestroy {
       return;
     }
     this.confirmationService.confirm({
-      message: 'Are you sure you want to change this status?',
+      message: 'Are you sure you want to add this expense?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
