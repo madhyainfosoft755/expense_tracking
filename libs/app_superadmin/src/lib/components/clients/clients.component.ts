@@ -85,7 +85,6 @@ export class ClientComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching clients:', err);
           this.loading = false;
         }
     });
@@ -154,7 +153,6 @@ export class ClientComponent implements OnInit {
     if(!this.selectedClient){
       return;
     }
-    console.log(this.clientForm.value)
     const formData = new FormData();
     // formData.set('client_name', 's')
     formData.append('client_name', this.clientForm.controls['client_name'].value);
@@ -164,7 +162,6 @@ export class ClientComponent implements OnInit {
     if(this.uploadedIcon){
       formData.append('icon', this.uploadedIcon as Blob);
     }
-    console.log(formData);
     // return;
     this.confirmationService.confirm({
       message: 'Are you sure you want to update this client information?',
@@ -182,7 +179,6 @@ export class ClientComponent implements OnInit {
               this.loadClients();
             },
             error: (err) => {
-              console.error('Error fetching clients:', err);
               this.loadingClientEdit = false;
             }
         });

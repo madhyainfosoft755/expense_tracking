@@ -49,11 +49,9 @@ export class CashbookComponent implements OnInit {
         next: (data) => {
           this.cashbookData = this.mergeCashbookAndExpense(data.cashbook_data, data.expense_data);
           this.cashbookMergedData = structuredClone(this.cashbookData);
-          console.log(this.cashbookData);
           this.loading = false;
         },
         error: (err: any) => {
-          console.error('Error in expense head:', err);
           this.loading = false;
         }
     });

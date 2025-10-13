@@ -53,7 +53,7 @@
       <div class="field">
         <label class="block" for="client_name">Client Name</label>
         <input id="client_name" pInputText formControlName="client_name" />
-        <small *ngIf="clientForm.get('client_name')?.invalid && clientForm.get('client_name')?.touched" class="p-error">
+        <small *ngIf="clientForm.get('client_name')?.invalid && clientForm.get('client_name')?.touched" class="text-red-500">
           Client name is required and must be under 255 characters.
         </small>
       </div>
@@ -62,7 +62,7 @@
       <div class="field">
         <label class="block" for="company_name">Company Name</label>
         <input id="company_name" pInputText formControlName="company_name" />
-        <small *ngIf="clientForm.get('company_name')?.invalid && clientForm.get('company_name')?.touched" class="p-error">
+        <small *ngIf="clientForm.get('company_name')?.invalid && clientForm.get('company_name')?.touched" class="text-red-500">
           Company name is required and must be under 255 characters.
         </small>
       </div>
@@ -81,7 +81,7 @@
         <div *ngIf="uploadedIcon" class="mt-2">Selected: {{ uploadedIcon.name }}</div>
   
         <!-- Error message -->
-        <small *ngIf="iconError" class="p-error">{{ iconError }}</small>
+        <small *ngIf="iconError" class="text-red-500">{{ iconError }}</small>
       </div>
 
       <!-- Row 2, Col 2: Icon Preview -->

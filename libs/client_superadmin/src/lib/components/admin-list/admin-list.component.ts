@@ -44,7 +44,6 @@ export class AdminListComponent implements OnInit {
                 this.loading = false;
             },
             error: (err) => {
-                console.error('Error fetching clients:', err);
                 this.loading = false;
             }
         });
@@ -55,7 +54,6 @@ export class AdminListComponent implements OnInit {
     }
 
     onEmitSelectedUser(user: any){
-        console.log(user)
         this.selectedUserDetails = user;
         this.visibleUserManageDialog = true;
     }
@@ -81,7 +79,6 @@ export class AdminListComponent implements OnInit {
                     // this.loading = false;
                 },
                 error: (err) => {
-                    console.error('Error fetching clients:', err);
                     // this.loading = false;
                 }
             });
@@ -95,7 +92,6 @@ export class AdminListComponent implements OnInit {
                     // this.loading = false;
                 },
                 error: (err) => {
-                    console.error('Error fetching clients:', err);
                     // this.loading = false;
                 }
             });

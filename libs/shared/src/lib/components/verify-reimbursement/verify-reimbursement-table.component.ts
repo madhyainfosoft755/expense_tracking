@@ -118,7 +118,6 @@ export class VerifyReimbursementTableComponent implements OnInit, OnDestroy {
             this.loading = false;
           },
           error: (err) => {
-            console.error('Error fetching dashboard data:', err);
             this.loading = false;
           }
         });
@@ -200,7 +199,6 @@ export class VerifyReimbursementTableComponent implements OnInit, OnDestroy {
     }
 
     onPageChanged(val: any){
-        console.log(val)
         if(val){
             this.page = val;
             this.loadUnApprovedCashbook(val)
@@ -215,7 +213,6 @@ export class VerifyReimbursementTableComponent implements OnInit, OnDestroy {
     }
 
     next() {
-      console.log('next call')
       this.onPageChanged(this.response?.next_page);
     }
 

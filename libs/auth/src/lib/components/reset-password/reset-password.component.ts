@@ -103,11 +103,9 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         //   });
         // Access the token from the route parameters
         this.token = this.route.snapshot.paramMap.get('token');
-        console.log('Token:', this.token);
 
         // Optionally, handle scenarios where the token is missing
         if (!this.token) {
-            console.error('Token is missing in the URL');
             //    this.messages = [
             //     { severity: 'error', detail: 'Token not found!' }
             //   ]
@@ -151,7 +149,6 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
                       this.validToken = false;
                       this.checkTokenLoading = false;
                       // this.serverErr = error.error;
-                      console.log(error)
                     //   this.messages = [
                     //       { severity: 'error', detail: error?.error?.message }
                     //   ]
@@ -192,7 +189,6 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
                     this.submitted = false;
                     this.loading = false;
                     // this.serverErr = error.error;
-                    console.log(error)
                     this.addMessages({ severity: 'error', content: error?.error?.error, life: 30000 });
                   }
               }

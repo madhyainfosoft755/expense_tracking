@@ -22,7 +22,6 @@ export class AuthEffects {
         of(AuthActions.loadAuthSuccess({ auth: [] }))
       ),
       catchError((error) => {
-        console.error('Error', error);
         return of(AuthActions.loadAuthFailure({ error }));
       })
     )
@@ -70,7 +69,6 @@ export class AuthEffects {
         ofType(AuthActions.userLoginSuccess),
         tap(({ response }) => {
           if (response.tokens) {
-            console.log('user from effect', response.user)
             this.router.navigate([`/${response.user.role.toLowerCase().replace('_', '-')}`]);
           }
         })

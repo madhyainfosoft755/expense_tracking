@@ -32,8 +32,6 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
   ]).pipe(
     first(),
     switchMap(([accessToken, refreshToken]) => {
-        console.log(accessToken)
-        console.log(refreshToken)
         let clonedRequest = req.clone({
             withCredentials: true,
             setHeaders: {

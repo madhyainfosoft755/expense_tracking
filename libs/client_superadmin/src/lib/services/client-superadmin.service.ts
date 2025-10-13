@@ -30,7 +30,6 @@ export class ClientSuperAdminService {
   }
 
   getSuperadminList(page =1, params: any = {}): Observable<any> {
-    console.log(params)
     return this.apiService.get(this.prefix+'get-client-superadmin/', {...params, ordering:'name', page: page});
   }
 

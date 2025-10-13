@@ -125,7 +125,6 @@ export class SummaryCashbookComponent implements OnInit {
                     id: null,
                     total: grandTotals
                 });
-                console.log(this.data)
                 this.loading = false;
             },
             error: (err) => {
@@ -145,7 +144,6 @@ export class SummaryCashbookComponent implements OnInit {
                 }
             },
             error: (err: any) => {
-            console.error('Error fetching dashboard data:', err);
             }
         });
     }

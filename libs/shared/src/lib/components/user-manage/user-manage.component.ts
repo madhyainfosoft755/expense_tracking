@@ -12,13 +12,15 @@ import { SelectModule } from 'primeng/select';
 import { CommonAPIService } from '../../services/common-api.service';
 import { HelperSharedService } from '../../services/helper-shared.service';
 import { PasswordModule } from 'primeng/password';
+import { FieldsetModule } from 'primeng/fieldset';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @Component({
   selector: 'lib-user-manage',
   templateUrl: './user-manage.component.html',
   standalone: true,
-  imports: [CommonModule, PanelModule, TableModule, PasswordModule, SelectModule, MessageModule, ReactiveFormsModule, ButtonModule, ToggleSwitchModule, InputTextModule ]
+  imports: [CommonModule, PanelModule, TableModule, ProgressSpinnerModule, FieldsetModule, PasswordModule, SelectModule, MessageModule, ReactiveFormsModule, ButtonModule, ToggleSwitchModule, InputTextModule ]
 })
 export class UserManageComponent implements OnInit, OnChanges {
     @Input() userDetails: any | undefined;
@@ -40,10 +42,10 @@ export class UserManageComponent implements OnInit, OnChanges {
         private helperSharedService: HelperSharedService
     ) {
         this.userForm = this.fb.group({
-            username:     ['', [Validators.required, Validators.maxLength(255)]],
-            first_name:   ['', [Validators.required, Validators.maxLength(255)]],
-            last_name:    ['', [Validators.required, Validators.maxLength(255)]],
-            email:        ['', [Validators.required, Validators.maxLength(255)]],
+            username:     ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+            first_name:   ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+            last_name:    ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+            email:        ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
             mobile_number:['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]{10}$')]],
             employee_id:  [''],
             allow_verify_cashbook_expense: [false, Validators.required],
@@ -75,7 +77,6 @@ export class UserManageComponent implements OnInit, OnChanges {
     }
 
     userRoleChanged(role: string) {
-        console.log(role)
         this.showPermissionSection = role === 'USER';
         if(role !== 'USER'){
             this.userForm.patchValue({
@@ -100,20 +101,19 @@ export class UserManageComponent implements OnInit, OnChanges {
                 this.commonApiService.getUserPermissions(changes['userDetails'].currentValue.id).subscribe({
                     next: (res: any) => {
                         this.loadingPermissions = false;
+                        this.showPermissionSection = true;
                         this.userForm.patchValue({
                             allow_verify_cashbook_expense: res?.permissions?.includes('allow_verify_cashbook_expense'),
                             allow_verify_reimbursement_expense: res?.permissions?.includes('allow_verify_reimbursement_expense'),
                         });
                     },
                     error: (err: any) => {
-                        console.error('Error fetching user permissions:', err);
                         this.loadingPermissions = false;
                     }
                 });
             }
         }
         if (changes['userDetails'] && !changes['userDetails'].firstChange) {
-            console.log(changes['userDetails'])
         }
         if (changes['rolesArr']) {
             this.showPermissionSection = this.rolesArr.filter(val=>val.name === 'USER').length > 0 && (this.userDetails ? this.userDetails.role === 'USER': true);
@@ -130,8 +130,6 @@ export class UserManageComponent implements OnInit, OnChanges {
 
     /** add / remove the mode-specific controls + validators */
     private applyUserDetails(): void {
-        console.log(this.userRole);
-        console.log(this.userRole && this.userRole !== 'USER' && this.userRole === 'SUPERADMIN');
         
 
         if(this.userRole && this.userRole !== 'USER' && this.userRole === 'SITE_ADMIN') {
@@ -175,7 +173,7 @@ export class UserManageComponent implements OnInit, OnChanges {
                 );
                 this.userForm.addControl(
                 'confirm_password',
-                new FormControl('', [Validators.required, Validators.maxLength(60), Validators.minLength(6)])
+                new FormControl('', [Validators.required])
                 );
             }
 

@@ -241,12 +241,6 @@ export class AppMenuComponent implements OnInit, OnDestroy {
                             items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: [`/${user.roleLower}`] }]
                         }
                     ]
-                    console.log(this.defaultVerifyRolesArr.includes(user.userRole));
-                    console.log(user.permissions.includes('allow_verify_cashbook_expense') ||
-                            user.permissions.includes('allow_verify_reimbursement_expense') || this.defaultVerifyRolesArr.includes(user.userRole));
-                    console.log(user.userRole);
-                    console.log(user);
-                    console.log(this.defaultVerifyRolesArr);
                     const verifyObj = {
                         label: 'Verify',
                         icon: 'pi pi-fw pi-bookmark',

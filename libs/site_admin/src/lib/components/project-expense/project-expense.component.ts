@@ -67,7 +67,6 @@ export class ProjectExpenseComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching expense head list:', err);
           this.loading = false;
         }
     });
@@ -78,12 +77,10 @@ export class ProjectExpenseComponent implements OnInit {
     this.siteAdminService.getProjectExpense()
       .subscribe({
         next: (data) => {
-          console.log(data)
           this.data = data;
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching data:', err);
           this.loading = false;
         }
     });
@@ -114,7 +111,6 @@ export class ProjectExpenseComponent implements OnInit {
               this.loadData();
             },
             error: (err: any) => {
-              console.error('Error in expense head:', err);
               this.loadAdding = false;
             }
         });

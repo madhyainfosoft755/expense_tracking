@@ -71,7 +71,6 @@ export class SharedCashbookComponent implements OnInit {
 
     this.currentUser$.subscribe(user => {
       if (user) {
-        console.log(user)
           this.userRole = user.role || null;
           if (user.role == 'SUPERADMIN'){
               this.getSiteList(user.priority_site);
@@ -100,11 +99,9 @@ export class SharedCashbookComponent implements OnInit {
         next: (data) => {
           this.cashbookData = this.mergeCashbookAndExpense(data.cashbook_data, data.expense_data);
           this.cashbookMergedData = structuredClone(this.cashbookData);
-          console.log(this.cashbookData);
           this.loading = false;
         },
         error: (err: any) => {
-          console.error('Error in expense head:', err);
           this.loading = false;
         }
     });
@@ -121,7 +118,6 @@ export class SharedCashbookComponent implements OnInit {
           }
         },
         error: (err: any) => {
-        console.error('Error fetching dashboard data:', err);
         }
     });
   }

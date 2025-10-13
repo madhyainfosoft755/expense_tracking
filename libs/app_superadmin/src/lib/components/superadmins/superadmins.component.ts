@@ -45,7 +45,6 @@ export class SuperadminsComponent implements OnInit {
                 this.loading = false;
             },
             error: (err) => {
-                console.error('Error fetching clients:', err);
                 this.loading = false;
             }
         });
@@ -56,7 +55,6 @@ export class SuperadminsComponent implements OnInit {
     }
 
     onPageChanged(val: any){
-        console.log(val)
         if(val){
             this.page = val;
             this.loadAllSuperadmins(val)
@@ -83,7 +81,6 @@ export class SuperadminsComponent implements OnInit {
                 // this.loading = false;
             },
             error: (err) => {
-                console.error('Error fetching clients:', err);
                 // this.loading = false;
             }
         });

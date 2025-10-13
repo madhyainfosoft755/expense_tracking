@@ -1,12 +1,28 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="p-fluid" *ngIf="userRole !== 'USER'">
+  <p-fieldset legend="User Details">
     <div class="grid grid-cols-6 gap-6">
 
       <!-- UserName -->
       <div class="field col-span-6 md:col-span-3">
-        <label class="block" for="username">Username</label>
+        <label autocomplete="off" class="block" for="username">Username</label>
         <input id="username" maxlength="255" pInputText formControlName="username" placeholder="Username" class="w-full" />
-        <small *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-red-500 block">
-          Username is required and must be under 255 characters.
+        <small
+          *ngIf="userForm.controls['username'].touched && userForm.controls['username'].errors?.['required']"
+          class="text-red-500 block mt-1"
+        >
+          Username is required.
+        </small>
+        <small
+          *ngIf="userForm.controls['username'].touched && userForm.controls['username'].errors?.['minlength']"
+          class="text-red-500 block mt-1"
+        >
+          Username must be at least 2 characters long.
+        </small>
+        <small
+          *ngIf="userForm.controls['username'].touched && userForm.controls['username'].errors?.['maxlength']"
+          class="text-red-500 block mt-1"
+        >
+          Username must be under 255 characters.
         </small>
       </div>
   
@@ -14,8 +30,23 @@
       <div class="field col-span-6 md:col-span-3">
         <label class="block" for="first_name">First Name</label>
         <input id="first_name" maxlength="255" pInputText formControlName="first_name" placeholder="First Name" class="w-full" />
-        <small *ngIf="userForm.get('first_name')?.invalid && userForm.get('first_name')?.touched" class="text-red-500 block">
-          First name is required and must be under 255 characters.
+        <small
+          *ngIf="userForm.controls['first_name'].touched && userForm.controls['first_name'].errors?.['required']"
+          class="text-red-500 block mt-1"
+        >
+          First name is required.
+        </small>
+        <small
+          *ngIf="userForm.controls['first_name'].touched && userForm.controls['first_name'].errors?.['minlength']"
+          class="text-red-500 block mt-1"
+        >
+          First name must be at least 2 characters long.
+        </small>
+        <small
+          *ngIf="userForm.controls['first_name'].touched && userForm.controls['first_name'].errors?.['maxlength']"
+          class="text-red-500 block mt-1"
+        >
+          First name must be under 255 characters.
         </small>
       </div>
 
@@ -23,17 +54,47 @@
       <div class="field col-span-6 md:col-span-3">
         <label class="block" for="last_name">Last Name</label>
         <input id="last_name" maxlength="255" pInputText formControlName="last_name" placeholder="Last Name" class="w-full" />
-        <small *ngIf="userForm.get('last_name')?.invalid && userForm.get('last_name')?.touched" class="text-red-500 block">
-          Last name is required and must be under 255 characters.
+        <small
+          *ngIf="userForm.controls['last_name'].touched && userForm.controls['last_name'].errors?.['required']"
+          class="text-red-500 block mt-1"
+        >
+          Last name is required.
+        </small>
+        <small
+          *ngIf="userForm.controls['last_name'].touched && userForm.controls['last_name'].errors?.['minlength']"
+          class="text-red-500 block mt-1"
+        >
+          Last name must be at least 2 characters long.
+        </small>
+        <small
+          *ngIf="userForm.controls['last_name'].touched && userForm.controls['last_name'].errors?.['maxlength']"
+          class="text-red-500 block mt-1"
+        >
+          Last name must be under 255 characters.
         </small>
       </div>
 
       <!-- Email -->
       <div class="field col-span-6 md:col-span-3">
-        <label class="block" for="email">Email</label>
+        <label autocomplete="off" class="block" for="email">Email</label>
         <input id="email" maxlength="255" pInputText formControlName="email" placeholder="Email" class="w-full" />
-        <small *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 block">
-          Email is required and must be under 255 characters.
+        <small
+          *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['required']"
+          class="text-red-500 block mt-1"
+        >
+          Email is required.
+        </small>
+        <small
+          *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['email']"
+          class="text-red-500 block mt-1"
+        >
+          Please enter a valid email address.
+        </small>
+        <small
+          *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['maxlength']"
+          class="text-red-500 block mt-1"
+        >
+          Email must be under 255 characters.
         </small>
       </div>
 
@@ -41,8 +102,23 @@
       <div class="field col-span-6 md:col-span-3">
         <label class="block" for="mobile_number">Mobile Number</label>
         <input id="mobile_number" maxlength="10" pInputText formControlName="mobile_number" placeholder="Mobile Number" class="w-full" (input)="checkPhone('mobile_number')" />
-        <small *ngIf="userForm.get('mobile_number')?.invalid && userForm.get('mobile_number')?.touched" class="text-red-500 block">
-          Mobile number is required and must be under 10 characters.
+        <small
+          *ngIf="userForm.controls['mobile_number'].touched && userForm.controls['mobile_number'].errors?.['required']"
+          class="text-red-500 block mt-1"
+        >
+          Mobile number is required.
+        </small>
+        <small
+          *ngIf="userForm.controls['mobile_number'].touched && userForm.controls['mobile_number'].errors?.['maxlength']"
+          class="text-red-500 block mt-1"
+        >
+          Mobile number must be 10 digits long.
+        </small>
+        <small
+          *ngIf="userForm.controls['mobile_number'].touched && userForm.controls['mobile_number'].errors?.['pattern']"
+          class="text-red-500 block mt-1"
+        >
+          Please enter a valid 10-digit number.
         </small>
       </div>
 
@@ -54,43 +130,6 @@
           Employee Id must be under 255 characters.
         </small> -->
       </div>
-
-      <!-- Password -->
-      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('password')">
-        <label class="block" for="password">Password</label>
-        <p-password [feedback]="false" [toggleMask]="true" id="password"  maxLength="60" formControlName="password" placeholder="Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
-        <small *ngIf="userForm.get('password')?.errors?.['required'] && userForm.get('password')?.touched" class="text-red-500 block">
-            Password is required.
-        </small>
-
-        <small *ngIf="userForm.get('password')?.errors?.['minlength'] && userForm.get('password')?.touched" class="text-red-500 block">
-            Password must be at least {{ userForm.get('password')?.errors?.['minlength']?.requiredLength }} characters.
-        </small>
-
-        <small *ngIf="userForm.get('password')?.errors?.['maxlength'] && userForm.get('password')?.touched" class="text-red-500 block">
-            Password cannot exceed {{ userForm.get('password')?.errors?.['maxlength']?.requiredLength }} characters.
-        </small>
-      </div>
-
-      <!-- Confirm Password -->
-      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('confirm_password')">
-        <label class="block" for="confirm_password">Confirm Password</label>
-        <p-password [feedback]="false" [toggleMask]="true" id="confirm_password" maxLength="60" formControlName="confirm_password" placeholder="Confirm Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
-        <small *ngIf="userForm.get('confirm_password')?.errors?.['required'] && userForm.get('confirm_password')?.touched" class="text-red-500 block">
-            Confirm password is required.
-        </small>
-
-        <small *ngIf="userForm.get('confirm_password')?.errors?.['minlength'] && userForm.get('confirm_password')?.touched" class="text-red-500 block">
-            Confirm password must be at least {{ userForm.get('confirm_password')?.errors?.['minlength']?.requiredLength }} characters.
-        </small>
-
-        <small *ngIf="userForm.get('confirm_password')?.errors?.['maxlength'] && userForm.get('confirm_password')?.touched" class="text-red-500 block">
-            Confirm password cannot exceed {{ userForm.get('confirm_password')?.errors?.['maxlength']?.requiredLength }} characters.
-        </small>
-
-        <small *ngIf="userForm.errors?.['passwordMismatch']" class="text-red-500">Passwords don't match</small>
-      </div>
-
       
       <!-- Site -->
       <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('site')">
@@ -117,31 +156,74 @@
         <p-toggleswitch id="is-active" formControlName="is_active" />
       </div>
     </div>
+  </p-fieldset>
+  <p-fieldset legend="Password" *ngIf="userForm.contains('password')">
+    <div class="grid grid-cols-6 gap-6">
+      <!-- Password -->
+      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('password')">
+        <label class="block" for="password">Password</label>
+        <p-password autocomplete="off" [feedback]="false" [toggleMask]="true" id="password"  maxLength="60" formControlName="password" placeholder="Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
+        <small *ngIf="userForm.get('password')?.errors?.['required'] && userForm.get('password')?.touched" class="text-red-500 block">
+            Password is required.
+        </small>
 
-    <div class="grid grid-cols-6 gap-3 mt-2" *ngIf="showPermissionSection">
-      <div class="field col-span-6">
-        <b>Permissions</b>
+        <small *ngIf="userForm.get('password')?.errors?.['minlength'] && userForm.get('password')?.touched" class="text-red-500 block">
+            Password must be at least {{ userForm.get('password')?.errors?.['minlength']?.requiredLength }} characters.
+        </small>
+
+        <small *ngIf="userForm.get('password')?.errors?.['maxlength'] && userForm.get('password')?.touched" class="text-red-500 block">
+            Password cannot exceed {{ userForm.get('password')?.errors?.['maxlength']?.requiredLength }} characters.
+        </small>
       </div>
-      <div class="field col-span-6 md:col-span-3" *ngIf="!loadingPermissions">
+
+      <!-- Confirm Password -->
+      <div class="field col-span-6 md:col-span-3" *ngIf="userForm.contains('confirm_password')">
+        <label class="block" for="confirm_password">Confirm Password</label>
+        <p-password autocomplete="off" [feedback]="false" [toggleMask]="true" id="confirm_password" maxLength="60" formControlName="confirm_password" placeholder="Confirm Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
+        <small *ngIf="userForm.get('confirm_password')?.errors?.['required'] && userForm.get('confirm_password')?.touched" class="text-red-500 block">
+            Confirm password is required.
+        </small>
+
+        <!-- <small *ngIf="userForm.get('confirm_password')?.errors?.['minlength'] && userForm.get('confirm_password')?.touched" class="text-red-500 block">
+            Confirm password must be at least {{ userForm.get('confirm_password')?.errors?.['minlength']?.requiredLength }} characters.
+        </small>
+
+        <small *ngIf="userForm.get('confirm_password')?.errors?.['maxlength'] && userForm.get('confirm_password')?.touched" class="text-red-500 block">
+            Confirm password cannot exceed {{ userForm.get('confirm_password')?.errors?.['maxlength']?.requiredLength }} characters.
+        </small> -->
+
+        <small *ngIf="userForm.errors?.['passwordMismatch']" class="text-red-500">Passwords don't match</small>
+      </div>
+    </div>
+  </p-fieldset>
+  <p-fieldset legend="Permissions" *ngIf="showPermissionSection && !loadingPermissions">
+    <div class="grid grid-cols-6 gap-3 mt-2" >
+      <!-- <div class="field col-span-6">
+        <b>Permissions</b>
+      </div> -->
+      <div class="field col-span-6 md:col-span-3">
         <div class="flex items-center">
           <p-toggleswitch id="allow-verify-cashbook-expense" formControlName="allow_verify_cashbook_expense" class="mr-2" />
           <span>Allow Verify Cashbook Expense</span>
         </div>
       </div>
-      <div class="field col-span-6 md:col-span-3" *ngIf="!loadingPermissions">
+      <div class="field col-span-6 md:col-span-3">
         <div class="flex items-center">
           <p-toggleswitch id="allow-verify-reimbursement-expense" formControlName="allow_verify_reimbursement_expense" class="mr-2" />
           <span>Allow Verify Reimbursement Expense</span>
         </div>
       </div>
-      <div *ngIf="loadingPermissions" class="field col-span-6 mb-2">
-        loading permissions...
-      </div>
     </div>
+  </p-fieldset>
+  <p-fieldset legend="Permissions" *ngIf="loadingPermissions">
+    <div class="field text-center col-span-6 mb-2">
+      <p-progressSpinner strokeWidth="4" [style]="{ width: '30px', height: '30px'}"  />
+    </div>
+  </p-fieldset>
 
-    <!-- Submit -->
-    <div class="field mt-3 text-right">
-      <p-button type="submit" label="Submit" [disabled]="userForm.invalid" />
-    </div>
+  <!-- Submit -->
+  <div class="field mt-3 text-right">
+    <p-button type="submit" label="Submit" [disabled]="userForm.invalid" />
+  </div>
 
 </form>

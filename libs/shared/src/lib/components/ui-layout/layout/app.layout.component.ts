@@ -39,7 +39,6 @@ export class AppLayoutComponent {
         public router: Router,
         private appTitleService: AppTitleService
     ) {
-        console.log('AppLayoutComponent loaded');
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
             if (!this.menuOutsideClickListener) {
                 this.menuOutsideClickListener = this.renderer.listen('document', 'click', (event) => {

@@ -54,7 +54,6 @@ export class SiteAdmin implements OnInit {
               this.loading = false;
           },
           error: (err) => {
-              console.error('Error fetching dashboard data:', err);
               this.loading = false;
           }
       });

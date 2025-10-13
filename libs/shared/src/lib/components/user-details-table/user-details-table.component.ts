@@ -38,15 +38,11 @@ export class UserDetailsTableComponent implements OnChanges {
     }
 
     pageChange(event: any) {
-      console.log(event)
         // this.first = event.first;
         // this.rows = event.rows;
     }
 
     next() {
-      console.log('next call')
-      console.log(this.users)
-      console.log(this.users?.next_page)
         this.pageChanged.emit(this.users?.next_page);
     }
 

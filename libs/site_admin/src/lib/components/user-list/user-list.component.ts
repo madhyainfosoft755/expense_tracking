@@ -41,6 +41,7 @@ export class UserListComponent implements OnInit {
     noData = false;
     isActive = '';
     preFilters = {};
+    sbmLoading = false;
 
     constructor(
         private siteAdminService: SiteAdminService,
@@ -55,7 +56,6 @@ export class UserListComponent implements OnInit {
         ];
         this.route.queryParams.subscribe(params => {
             this.isActive = params['is_active']; // Convert to boolean
-            console.log('Is Active:', this.isActive);
         });
         const data = this.isActive && this.isActive!=''?{is_active: this.isActive === 'true'}:{};
         this.preFilters = data;
@@ -73,7 +73,6 @@ export class UserListComponent implements OnInit {
                 this.visibleUserFilter = this.noData ?? false;
             },
             error: (err) => {
-                console.error('Error fetching clients:', err);
                 this.loading = false;
             }
         });
@@ -85,7 +84,6 @@ export class UserListComponent implements OnInit {
     }
 
     onEmitSelectedUser(user: any){
-        console.log(user)
         this.selectedUserDetails = user;
         this.visibleUserManageDialog = true;
     }
@@ -100,7 +98,6 @@ export class UserListComponent implements OnInit {
     }
 
     onPageChanged(val: any){
-        console.log(val)
         if(val){
             this.page = val;
             this.loadAllUsers(val)
@@ -113,31 +110,31 @@ export class UserListComponent implements OnInit {
             if ('id' in user) {
                 delete user.isActive;
             }
+            this.sbmLoading = true;
             this.siteAdminService.updateSiteUserDetails(userId, user)
             .subscribe({
                 next: (data) => {
                     this.loadAllUsers();
                     this.visibleUserManageDialog = false;
                     this.selectedUserDetails = null;
-                    // this.loading = false;
+                    this.sbmLoading = false;
                 },
                 error: (err) => {
-                    console.error('Error fetching clients:', err);
-                    // this.loading = false;
+                    this.sbmLoading = false;
                 }
             });
         } else {
+            this.sbmLoading = true;
             this.siteAdminService.siteUserAdminCreate(user)
             .subscribe({
                 next: (data) => {
                     this.loadAllUsers();
                     this.visibleUserManageDialog = false;
                     this.selectedUserDetails = null;
-                    // this.loading = false;
+                    this.sbmLoading = false;
                 },
                 error: (err) => {
-                    console.error('Error fetching clients:', err);
-                    // this.loading = false;
+                    this.sbmLoading = false;
                 }
             });
         }
@@ -151,7 +148,6 @@ export class UserListComponent implements OnInit {
     }
 
     onEmitFilterData(data: any){
-        console.log(data)
         this.page = 1;
         this.noData = !this.helperSharedService.isTruthyObject(data);
         this.isFilterApplied = !this.noData;

@@ -16,6 +16,5 @@ import { TestComponent } from '@shared';
 })
 export class HomeComponent {
   constructor() {
-    console.log('HomeComponent loaded');
   }
 }

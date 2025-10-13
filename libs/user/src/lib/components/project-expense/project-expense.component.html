@@ -61,7 +61,7 @@
       <div class="field col-span-12">
         <label class="block" for="date">Date</label>
         <p-datepicker id="date" appendTo="body" placeholder="Date" formControlName="date" styleClass="w-full" dateFormat="dd-mm-yy"/>
-        <small *ngIf="amtReceivedFrom.get('date')?.invalid && amtReceivedFrom.get('date')?.touched" class="p-error">
+        <small *ngIf="amtReceivedFrom.get('date')?.invalid && amtReceivedFrom.get('date')?.touched" class="text-red-500">
           Date is required and must be under 255 characters.
         </small>
       </div>
@@ -70,7 +70,7 @@
       <div class="field col-span-12">
         <label class="block" for="amount">Amount</label>
         <input id="amount" placeholder="Amount" pInputText formControlName="amount" styleClass="w-full" />
-        <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="p-error">
+        <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="text-red-500">
           Amount is required.
         </small>
       </div>
@@ -79,7 +79,7 @@
       <div class="field col-span-12">
         <label class="block" for="vendor_name">Vendor Name</label>
         <input id="vendor_name" placeholder="Vendor Name" pInputText formControlName="vendor_name" styleClass="w-full" />
-        <small *ngIf="amtReceivedFrom.get('vendor_name')?.invalid && amtReceivedFrom.get('vendor_name')?.touched" class="p-error">
+        <small *ngIf="amtReceivedFrom.get('vendor_name')?.invalid && amtReceivedFrom.get('vendor_name')?.touched" class="text-red-500">
           Vendor Name is required.
         </small>
       </div>
@@ -88,7 +88,7 @@
       <div class="field col-span-12">
         <label class="block" for="description">Description</label>
         <input id="description" placeholder="Description" pInputText formControlName="description" styleClass="w-full" />
-        <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="p-error">
+        <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="text-red-500">
           Name is required and must be under 255 characters.
         </small>
       </div>
@@ -107,7 +107,7 @@
             [filter]="true" 
             filterBy="name"  />
 
-        <small *ngIf="amtReceivedFrom.get('expense_head')?.invalid && amtReceivedFrom.get('expense_head')?.touched" class="p-error">
+        <small *ngIf="amtReceivedFrom.get('expense_head')?.invalid && amtReceivedFrom.get('expense_head')?.touched" class="text-red-500">
           User is required.
         </small>
       </div>

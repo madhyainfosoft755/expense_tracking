@@ -68,7 +68,6 @@ export class SiteComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching dashboard data:', err);
           this.loading = false;
         }
       });
@@ -100,14 +99,12 @@ export class SiteComponent implements OnInit {
       this.clientSuperAdminService.updateSite(this.selectedSite.id, {name: this.siteForm.value.name})
         .subscribe({
           next: (response: any) => {
-            console.log('Site updated successfully:', response);
             this.onCloseSiteDetailsModel();
             this.addMessages({ severity: 'success', content: response?.message ?? 'Site Updated Successfully.', life: 30000 });
             this.addUpdateLoading = false;
             this.getSiteList(); // Refresh the site list
           },
           error: (error) => {
-            console.error('Error updating site:', error);
             this.addMessages({ severity: 'error', content: error?.error?.error ?? 'Unable to update site.', life: 30000 });
             this.addUpdateLoading = false;
           }
@@ -117,14 +114,12 @@ export class SiteComponent implements OnInit {
       this.clientSuperAdminService.addNewSite({name: this.siteForm.value.name})
         .subscribe({
           next: (response: any) => {
-            console.log('New site added successfully:', response);
             this.onCloseSiteDetailsModel();
             this.addMessages({ severity: 'success', content: response?.message ?? 'Site Added Successfully.', life: 30000 });
             this.addUpdateLoading = false;
             this.getSiteList(); // Refresh the site list
           },
           error: (error) => {
-            console.error('Error adding new site:', error);
             this.addMessages({ severity: 'error', content: error?.error?.error ?? 'Unable to add site.', life: 30000 });
             this.addUpdateLoading = false;
           }
@@ -147,13 +142,11 @@ export class SiteComponent implements OnInit {
             this.clientSuperAdminService.updateSitePriority(site.id)
               .subscribe({
                 next: (response: any) => {
-                  console.log('Site priority updated successfully:', response);
                   this.loading = false;
                   this.addMessages({ severity: 'success', content: response?.message ?? 'Site Priority Changed Successfully.', life: 30000 });
                   this.getSiteList(); // Refresh the site list
                 },
                 error: (error) => {
-                  console.error('Error updating site priority:', error);
                   this.addMessages({ severity: 'error', content: error?.error?.error ?? 'Unable to update site priority.', life: 30000 });
                   this.loading = false
                   // this.siteData = structuredClone(this.siteData);

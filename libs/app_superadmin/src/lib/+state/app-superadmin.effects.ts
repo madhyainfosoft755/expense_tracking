@@ -15,7 +15,6 @@ export class AppSuperadminEffects {
         of(AppSuperadminActions.loadAppSuperadminSuccess({ appSuperadmin: [] }))
       ),
       catchError((error) => {
-        console.error('Error', error);
         return of(AppSuperadminActions.loadAppSuperadminFailure({ error }));
       })
     )

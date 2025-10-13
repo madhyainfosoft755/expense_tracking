@@ -32,16 +32,16 @@ export class AddClientComponent implements OnInit {
     private router: Router,
     private helperSharedService: HelperSharedService) {
     this.clientForm = this.fb.group({
-        username:     ['', [Validators.required, Validators.maxLength(255)]],
-        first_name:   ['', [Validators.required, Validators.maxLength(255)]],
-        last_name:    ['', [Validators.required, Validators.maxLength(255)]],
-        email:        ['', [Validators.required, Validators.maxLength(255)]],
+        username:     ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+        first_name:   ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+        last_name:    ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+        email:        ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
         mobile_number:['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]{10}$')]],
         employee_id:  [''],
         client_name: ['', [Validators.required, Validators.maxLength(255)]],
-        company_name: ['', [Validators.required, Validators.maxLength(60), Validators.minLength(6)]],
+        company_name: ['', [Validators.required, Validators.maxLength(255)]],
         password: ['', [Validators.required, Validators.maxLength(60), Validators.minLength(6)]],
-        confirm_password: ['', [Validators.required, Validators.maxLength(255)]],
+        confirm_password: ['', [Validators.required]],
     });
 
     this.clientForm.setValidators(this.passwordsMatchValidator);
@@ -74,7 +74,6 @@ export class AddClientComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching users:', err);
           this.loading = false;
         }
       });
@@ -89,6 +88,7 @@ export class AddClientComponent implements OnInit {
   
     if (!input.files || input.files.length === 0) {
       // this.iconError = 'No file selected.';
+      this.previewUrl = null;
       return;
     }
   
@@ -143,7 +143,6 @@ export class AddClientComponent implements OnInit {
         this.clientForm.reset();
         this.router.navigate(['/app-superadmin/clients']);
       },error: (err) => {
-        console.error('Error adding client:', err);
         this.loading = false;
         alert('Error adding client');
       }

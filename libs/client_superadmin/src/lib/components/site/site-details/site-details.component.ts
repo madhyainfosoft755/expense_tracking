@@ -47,7 +47,6 @@ export class SiteDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.siteId = params.get('id')!;
     });
-    console.log('Site ID:', this.siteId);
     this.loadSiteDetails();
   }
   
@@ -59,7 +58,6 @@ export class SiteDetailsComponent implements OnInit {
     //       this.loading = false;
     //     },
     //     error: (err) => {
-    //       console.error('Error fetching site details:', err);
     //       this.loading = false;
     //     }
     // });

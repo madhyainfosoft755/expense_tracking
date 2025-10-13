@@ -9,8 +9,17 @@
                 <div class="field col-span-6 md:col-span-3">
                     <label class="block" for="client_name">Client Name</label>
                     <input id="client_name" maxlength="255" pInputText formControlName="client_name" placeholder="Client Name" class="w-full" />
-                    <small *ngIf="clientForm.get('client_name')?.invalid && clientForm.get('client_name')?.touched" class="text-red-500 block">
-                    Client name is required and must be under 255 characters.
+                    <small
+                        *ngIf="clientForm.controls['client_name'].touched && clientForm.controls['client_name'].errors?.['required']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Client name is required.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['client_name'].touched && clientForm.controls['client_name'].errors?.['maxlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Client name must be under 255 characters.
                     </small>
                 </div>
     
@@ -19,8 +28,17 @@
                 <div class="field col-span-6 md:col-span-3">
                     <label class="block" for="company_name">Company Name</label>
                     <input id="company_name" maxlength="255" pInputText formControlName="company_name" placeholder="Company Name" class="w-full" />
-                    <small *ngIf="clientForm.get('company_name')?.invalid && clientForm.get('company_name')?.touched" class="text-red-500 block">
-                    Company name is required and must be under 255 characters.
+                    <small
+                        *ngIf="clientForm.controls['company_name'].touched && clientForm.controls['company_name'].errors?.['required']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Company name is required.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['company_name'].touched && clientForm.controls['company_name'].errors?.['maxlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Company name must be under 255 characters.
                     </small>
                 </div>
     
@@ -42,7 +60,7 @@
                 </div>
     
                 <!-- Row 2, Col 2: Icon Preview -->
-                <div class="flex items-center" *ngIf="previewUrl">
+                <div class="flex items-center" *ngIf="previewUrl && uploadedIcon">
                     <img [src]="previewUrl" alt="Preview" class="max-h-[100px] max-w-[200px] object-contain border rounded shadow" />
                 </div>
             </div>
@@ -52,10 +70,25 @@
             <div class="grid grid-cols-6 gap-6">
                 <!-- UserName -->
                 <div class="field col-span-6 md:col-span-3">
-                    <label class="block" for="username">Username</label>
+                    <label autocomplete="off" class="block" for="username">Username</label>
                     <input id="username" maxlength="255" pInputText formControlName="username" placeholder="Username" class="w-full" />
-                    <small *ngIf="clientForm.get('username')?.invalid && clientForm.get('username')?.touched" class="text-red-500 block">
-                    Username is required and must be under 255 characters.
+                    <small
+                        *ngIf="clientForm.controls['username'].touched && clientForm.controls['username'].errors?.['required']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Username is required.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['username'].touched && clientForm.controls['username'].errors?.['minlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Username must be at least 2 characters long.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['username'].touched && clientForm.controls['username'].errors?.['maxlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Username must be under 255 characters.
                     </small>
                 </div>
             
@@ -63,8 +96,23 @@
                 <div class="field col-span-6 md:col-span-3">
                     <label class="block" for="first_name">First Name</label>
                     <input id="first_name" maxlength="255" pInputText formControlName="first_name" placeholder="First Name" class="w-full" />
-                    <small *ngIf="clientForm.get('first_name')?.invalid && clientForm.get('first_name')?.touched" class="text-red-500 block">
-                    First name is required and must be under 255 characters.
+                    <small
+                        *ngIf="clientForm.controls['first_name'].touched && clientForm.controls['first_name'].errors?.['required']"
+                        class="text-red-500 block mt-1"
+                    >
+                        First name is required.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['first_name'].touched && clientForm.controls['first_name'].errors?.['minlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        First name must be at least 2 characters long.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['first_name'].touched && clientForm.controls['first_name'].errors?.['maxlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        First name must be under 255 characters.
                     </small>
                 </div>
     
@@ -72,17 +120,47 @@
                 <div class="field col-span-6 md:col-span-3">
                     <label class="block" for="last_name">Last Name</label>
                     <input id="last_name" maxlength="255" pInputText formControlName="last_name" placeholder="Last Name" class="w-full" />
-                    <small *ngIf="clientForm.get('last_name')?.invalid && clientForm.get('last_name')?.touched" class="text-red-500 block">
-                    Last name is required and must be under 255 characters.
+                    <small
+                        *ngIf="clientForm.controls['last_name'].touched && clientForm.controls['last_name'].errors?.['required']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Last name is required.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['last_name'].touched && clientForm.controls['last_name'].errors?.['minlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Last name must be at least 2 characters long.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['last_name'].touched && clientForm.controls['last_name'].errors?.['maxlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Last name must be under 255 characters.
                     </small>
                 </div>
     
                 <!-- Email -->
                 <div class="field col-span-6 md:col-span-3">
                     <label class="block" for="email">Email</label>
-                    <input id="email" maxlength="255" pInputText formControlName="email" placeholder="Email" class="w-full" />
-                    <small *ngIf="clientForm.get('email')?.invalid && clientForm.get('email')?.touched" class="text-red-500 block">
-                    Email is required and must be under 255 characters.
+                    <input autocomplete="off" id="email" maxlength="255" pInputText formControlName="email" placeholder="Email" class="w-full" />
+                    <small
+                        *ngIf="clientForm.controls['email'].touched && clientForm.controls['email'].errors?.['required']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Email is required.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['email'].touched && clientForm.controls['email'].errors?.['email']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Please enter a valid email address.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['email'].touched && clientForm.controls['email'].errors?.['maxlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Email must be under 255 characters.
                     </small>
                 </div>
     
@@ -90,8 +168,23 @@
                 <div class="field col-span-6 md:col-span-3">
                     <label class="block" for="mobile_number">Mobile Number</label>
                     <input id="mobile_number" maxlength="10" pInputText formControlName="mobile_number" placeholder="Mobile Number" class="w-full" (input)="checkPhone('mobile_number')" />
-                    <small *ngIf="clientForm.get('mobile_number')?.invalid && clientForm.get('mobile_number')?.touched" class="text-red-500 block">
-                        Mobile number is required and must be under 10 characters.
+                    <small
+                        *ngIf="clientForm.controls['mobile_number'].touched && clientForm.controls['mobile_number'].errors?.['required']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Mobile number is required.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['mobile_number'].touched && clientForm.controls['mobile_number'].errors?.['maxlength']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Mobile number must be 10 digits long.
+                    </small>
+                    <small
+                        *ngIf="clientForm.controls['mobile_number'].touched && clientForm.controls['mobile_number'].errors?.['pattern']"
+                        class="text-red-500 block mt-1"
+                    >
+                        Please enter a valid 10-digit number.
                     </small>
                 </div>
     
@@ -100,14 +193,14 @@
                     <label class="block" for="employee_id">Employee Id</label>
                     <input id="employee_id" maxlength="255" pInputText formControlName="employee_id" placeholder="Employee Id" class="w-full" />
                     <small *ngIf="clientForm.get('employee_id')?.invalid && clientForm.get('employee_id')?.touched" class="text-red-500 block">
-                    Employee Id must be under 255 characters.
+                        Employee Id must be under 255 characters.
                     </small>
                 </div>
     
                 <!-- Password -->
                 <div class="field col-span-6 md:col-span-3" *ngIf="clientForm.contains('password')">
                     <label class="block" for="password">Password</label>
-                    <p-password [feedback]="false" [toggleMask]="true" id="password" maxLength="60" formControlName="password" placeholder="Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
+                    <p-password autocomplete="off" [feedback]="false" [toggleMask]="true" id="password" maxLength="60" formControlName="password" placeholder="Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
                     <small *ngIf="clientForm.get('password')?.errors?.['required'] && clientForm.get('password')?.touched" class="text-red-500 block">
                         Password is required.
                     </small>
@@ -124,18 +217,18 @@
                 <!-- Confirm Password -->
                 <div class="field col-span-6 md:col-span-3" *ngIf="clientForm.contains('confirm_password')">
                     <label class="block" for="confirm_password">Confirm Password</label>
-                    <p-password [feedback]="false" [toggleMask]="true" id="confirm_password" maxLength="60" formControlName="confirm_password" placeholder="Confirm Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
+                    <p-password autocomplete="off" [feedback]="false" [toggleMask]="true" id="confirm_password" maxLength="60" formControlName="confirm_password" placeholder="Confirm Password" ngClass="w-full" [inputStyle]="{'width': '100%'}"></p-password>
                     <small *ngIf="clientForm.get('confirm_password')?.errors?.['required'] && clientForm.get('confirm_password')?.touched" class="text-red-500 block">
                         Confirm password is required.
                     </small>
 
-                    <small *ngIf="clientForm.get('confirm_password')?.errors?.['minlength'] && clientForm.get('confirm_password')?.touched" class="text-red-500 block">
+                    <!-- <small *ngIf="clientForm.get('confirm_password')?.errors?.['minlength'] && clientForm.get('confirm_password')?.touched" class="text-red-500 block">
                         Confirm password must be at least {{ clientForm.get('confirm_password')?.errors?.['minlength']?.requiredLength }} characters.
                     </small>
 
                     <small *ngIf="clientForm.get('confirm_password')?.errors?.['maxlength'] && clientForm.get('confirm_password')?.touched" class="text-red-500 block">
                         Confirm password cannot exceed {{ clientForm.get('confirm_password')?.errors?.['maxlength']?.requiredLength }} characters.
-                    </small>
+                    </small> -->
 
                     <small *ngIf="clientForm.errors?.['passwordMismatch']" class="text-red-500">Passwords don't match</small>
                 </div>

@@ -59,7 +59,7 @@
       <!-- Name -->
       <div class="field">
         <label class="block" for="name">Expense Head Name</label>
-        <input id="name" placeholder="Expense Head Name" pInputText formControlName="name" styleClass="w-full" (input)="apiErrorMessage = ''" />
+        <input id="name" maxlength="255" placeholder="Expense Head Name" pInputText formControlName="name" styleClass="w-full" (input)="apiErrorMessage = ''" />
         <small *ngIf="expenseHeadForm.get('name')?.invalid && expenseHeadForm.get('name')?.touched" class="text-red-500">
           Name is required and must be under 255 characters.
         </small>
@@ -82,7 +82,7 @@
           appendTo="body" 
           styleClass="w-full"/>
 
-        <small *ngIf="expenseHeadForm.get('office_locations')?.invalid && expenseHeadForm.get('office_locations')?.touched" class="p-error">
+        <small *ngIf="expenseHeadForm.get('office_locations')?.invalid && expenseHeadForm.get('office_locations')?.touched" class="text-red-500">
           Sites are required.
         </small>
       </div> -->

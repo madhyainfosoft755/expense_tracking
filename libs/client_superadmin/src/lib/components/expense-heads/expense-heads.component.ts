@@ -96,7 +96,6 @@ export class ExpenseHeadsComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching expense head list:', err);
           this.loading = false;
         }
     });
@@ -110,7 +109,6 @@ export class ExpenseHeadsComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching site list:', err);
           this.loading = false;
         }
     });
@@ -166,7 +164,6 @@ export class ExpenseHeadsComponent implements OnInit {
               this.loadExpenseHeads();
             },
             error: (err: any) => {
-              console.error('Error in expense head:', err);
               this.apiErrorMessage = err?.error?.name ?? (this.selectedExpenseHead ? "Unable to update expense head." : "Unable to add expense head.");
               this.loadingEHEdit = false;
               const msg = this.selectedExpenseHead ? 'Unable to update ecpense head.' : 'Unable to add expense head.';

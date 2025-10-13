@@ -12,7 +12,6 @@ export const clientSuperadminAuthGuard: CanActivateFn = (route, state) => {
   
   return store.select(selectUser).pipe(
     map((user) => {
-      console.log('user from client admin', user)
       if (!user) {
         return router.createUrlTree([`/login`]);
       } else {

@@ -188,7 +188,6 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (err: any) => {
-          console.error('Error fetching expense head list:', err);
           this.loading = false;
         }
     });
@@ -214,7 +213,6 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (err: any) => {
-          console.error('Error fetching data:', err);
           this.loading = false;
         }
     });
@@ -231,7 +229,6 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
           }
         },
         error: (err: any) => {
-          console.error('Error fetching dashboard data:', err);
         }
       });
   }
@@ -277,7 +274,6 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
               this.onClearFilter();
             },
             error: (err: any) => {
-              console.error('Error in expense head:', err);
               this.loadAdding = false;
             }
         });
@@ -332,7 +328,6 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
   }
 
   onPageChanged(val: any){
-    console.log(val)
     if(val){
         this.page = val;
         this.loadData(val)
@@ -348,7 +343,6 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
 
 
   next() {
-    console.log('next call')
     this.onPageChanged(this.data?.next_page);
   }
 

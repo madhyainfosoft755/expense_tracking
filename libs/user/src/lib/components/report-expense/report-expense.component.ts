@@ -178,7 +178,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching expense head list:', err);
           this.loading = false;
         }
     });
@@ -196,7 +195,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching data:', err);
           this.loading = false;
         }
     });
@@ -209,7 +207,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
           this.sites = data;
         },
         error: (err) => {
-          console.error('Error fetching dashboard data:', err);
         }
       });
   }
@@ -255,7 +252,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
               this.onClearFilter();
             },
             error: (err: any) => {
-              console.error('Error in expense head:', err);
               this.loadAdding = false;
 
               if (err.status === 400 && err.error) {
@@ -282,7 +278,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
       } else if (field === 'non_field_errors') {
         this.globalError = errors[field].join(', ');
       } else {
-        console.warn(`Server error for unknown field: ${field}`, errors[field]);
       }
     });
   }
@@ -330,7 +325,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
   }
 
   onPageChanged(val: any){
-    console.log(val)
     if(val){
         this.page = val;
         this.loadData(val)
@@ -346,7 +340,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
 
 
   next() {
-    console.log('next call')
     this.onPageChanged(this.data?.next_page);
   }
 

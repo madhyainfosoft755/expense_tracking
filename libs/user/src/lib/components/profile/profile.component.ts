@@ -45,10 +45,10 @@ export class ProfileComponent implements OnInit {
     this.profileForm = this.fb.group(
       {
         // salutation: ['Mr.', Validators.required],
-        first_name: ['', [Validators.required, Validators.maxLength(255)]],
-        last_name: ['', [Validators.required, Validators.maxLength(255)]],
+        first_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+        last_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
         email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-        username: ['', [Validators.required, Validators.maxLength(255)]],
+        username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
         // employee_id: ['', [Validators.maxLength(25)]],
         mobile_number: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]{10}$')]],
       }
@@ -87,7 +87,6 @@ export class ProfileComponent implements OnInit {
       }, 
       error: (err)=>{
         this.loadingProfile = false;
-        console.log(err);
       }
     });
   }
@@ -114,7 +113,6 @@ export class ProfileComponent implements OnInit {
       }, 
       error: (err)=>{
         this.loading = false;
-        console.log(err);
         this.addMessages({ severity: 'error', content: err?.error?.error, life: 30000 });
       }
     });

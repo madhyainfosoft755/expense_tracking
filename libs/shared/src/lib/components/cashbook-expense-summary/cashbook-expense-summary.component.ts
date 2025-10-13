@@ -118,7 +118,6 @@ export class CashbookExpenseSummaryComponent implements OnInit {
               this.loadingED = false;
           },
           error: (err: any) => {
-              console.error('Error fetching Expense summary data:', err);
               this.loadingED = false;
           }
       });
@@ -135,7 +134,6 @@ export class CashbookExpenseSummaryComponent implements OnInit {
                 }
             },
             error: (err: any) => {
-            console.error('Error fetching dashboard data:', err);
             }
         });
     }

@@ -44,7 +44,6 @@ export class SuperadminListComponent implements OnInit {
         ];
         this.route.queryParams.subscribe(params => {
             this.isActive = params['is_active']; // Convert to boolean
-            console.log('Is Active:', this.isActive);
         });
         const data = this.isActive && this.isActive!=''?{is_active: this.isActive === 'true'}:{};
         this.preFilters = data;
@@ -62,7 +61,6 @@ export class SuperadminListComponent implements OnInit {
                 this.visibleUserFilter = this.noData ?? false;
             },
             error: (err) => {
-                console.error('Error fetching clients:', err);
                 this.loading = false;
             }
         });
@@ -86,7 +84,6 @@ export class SuperadminListComponent implements OnInit {
     }
 
     onPageChanged(val: any){
-        console.log(val)
         if(val){
             this.page = val;
             this.loadAllSuperadmins(val)
@@ -105,7 +102,6 @@ export class SuperadminListComponent implements OnInit {
                 // this.loading = false;
             },
             error: (err) => {
-                console.error('Error fetching clients:', err);
                 // this.loading = false;
             }
         });
@@ -119,7 +115,6 @@ export class SuperadminListComponent implements OnInit {
     }
 
     onEmitFilterData(data: any){
-        console.log(data)
         this.page = 1;
         this.noData = !this.helperSharedService.isTruthyObject(data);
         this.isFilterApplied = !this.noData;

@@ -31,7 +31,6 @@ export class UserDashboardComponent implements OnInit {
   ngOnInit(): void {
     // this.currentUser$.subscribe(user => {
     //   if (user) {
-    //     console.log(user)
     //   } else {
     //   }
     // });
@@ -47,7 +46,6 @@ export class UserDashboardComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error fetching expense head list:', err);
           this.loading = false;
         }
     });

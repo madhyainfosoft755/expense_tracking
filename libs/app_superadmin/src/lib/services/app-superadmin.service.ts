@@ -20,7 +20,6 @@ export class AppSuperAdminService {
   }
 
   updateClient(client_id: string, data: FormData): Observable<any> {
-    console.log(data)
     return this.apiService.patch(`${this.prefix}update-client/${client_id}/`, data);
   }
 

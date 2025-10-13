@@ -92,7 +92,6 @@ export class ForgotPasswordComponent {
                         this.submitted = false;
                         this.loading = false;
                         // this.serverErr = error.error;
-                        console.log(error)
                         this.addMessages({severity: 'error', life: 30000, content: error?.error?.error || 'An error occurred while processing your request.'});
                       }
                   }

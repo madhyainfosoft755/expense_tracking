@@ -29,9 +29,9 @@ export class ChangePasswordComponent implements OnInit{
       private userService: UserService,
   ) {
     this.changePasswordForm = this.fb.group({
-      current_password: ['', Validators.required],
-      new_password: ['', [Validators.required, Validators.minLength(6)]],
-      confirm_password: ['', Validators.required]
+      current_password: ['', [Validators.required, Validators.maxLength(60)]],
+      new_password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(60)]],
+      confirm_password: ['', [Validators.required, Validators.maxLength(60)]]
       },
       { validator: this.passwordMatchValidator });
 
@@ -82,7 +82,6 @@ export class ChangePasswordComponent implements OnInit{
                   error: (error: any) => {
                       this.loading = false;
                       // this.serverErr = error.error;
-                      console.log(error)
                       this.addMessages({ severity: 'error', content: error?.error?.error, life: 30000 });
                   }
               }

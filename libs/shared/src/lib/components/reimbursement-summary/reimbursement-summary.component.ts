@@ -66,7 +66,6 @@ export class ReimbursementSummaryComponent implements OnInit {
         this.currentUser$.subscribe(user => {
             if (user) {
                 this.userRole = user.role || null;
-                console.log(user);
                 if (user.role == 'SUPERADMIN'){
                     this.getSiteList(user.priority_site);
                 }
@@ -118,7 +117,6 @@ export class ReimbursementSummaryComponent implements OnInit {
                 this.loadingPED = false;
             },
             error: (err: any) => {
-                console.error('Error fetching Expense summary data:', err);
                 this.loadingPED = false;
             }
         });
@@ -135,7 +133,6 @@ export class ReimbursementSummaryComponent implements OnInit {
                 }
             },
             error: (err: any) => {
-            console.error('Error fetching dashboard data:', err);
             }
         });
     }
