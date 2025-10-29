@@ -1,7 +1,7 @@
 <p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
 <div class="card">
     <div class="font-semibold text-xl mb-4">
-      <p-button (click)="addAmtReceived()" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
+      <p-button (click)="addAmtReceived()" [disabled]="loadAdding" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
       <p-button 
           [icon]="'pi pi-filter'"   
           [severity]="'success'" 
@@ -16,6 +16,7 @@
       <!-- <p-multiselect [options]="office_locations" *ngIf="office_locations.length > 0" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" [maxSelectedLabels]="3" (onChange)="onOfficeLocationChange($event.value)"  /> -->
       
     </div>
+    <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()">
     <p-table [value]="data?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false">
         <ng-template pTemplate="header">
           <tr>
@@ -35,7 +36,62 @@
             <!-- <td>{{ row.timestamp | date:'dd-MM-yyyy' }}</td> -->
           </tr>
         </ng-template>
+        <!-- Editable empty row for adding new data -->
+        <ng-template pTemplate="footer">
+          <tr>
+            <td>—</td>
+
+            <!-- Received From -->
+            <td>
+              <input
+                type="text"
+                pInputText
+                formControlName="received_from_name"
+                placeholder="Enter name"
+                class="w-full"
+              />
+              <small *ngIf="amtReceivedFrom.get('received_from_name')?.invalid && amtReceivedFrom.get('received_from_name')?.touched" class="text-red-500">">
+                Name is required and must be under 255 characters.
+              </small>
+            </td>
+
+            <!-- Amount -->
+            <td>
+              <input
+                type="text"
+                pInputText
+                formControlName="amount"
+                placeholder="Enter amount"
+                class="w-full"
+                (input)="checkAmountInput2('amount')"
+              />
+              <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="text-red-500">
+                Amount is required.
+              </small>
+            </td>
+
+            <!-- Date -->
+            <td>
+              <p-datepicker [maxDate]="today" appendTo="body" id="date_received" placeholder="Date" formControlName="date_received" styleClass="w-full" dateFormat="dd-mm-yy"/>
+              <small *ngIf="amtReceivedFrom.get('date_received')?.invalid && amtReceivedFrom.get('date_received')?.touched" class="text-red-500">
+                Date is required.
+              </small>
+            </td>
+
+            <!-- Add button -->
+            <td class="text-center">
+              <p-button
+                icon="pi pi-check"
+                label="Add"
+                [disabled]="amtReceivedFrom.invalid"
+                [loading]="loadAdding"
+                type="submit"
+              ></p-button>
+            </td>
+          </tr>
+        </ng-template>
     </p-table>
+    </form>
     <div class="mt-2 flex justify-end items-center" *ngIf="data?.data?.length > 0 && paginationText">
       <div class="mr-2"> 
       {{ paginationText }}
@@ -102,7 +158,7 @@
 
     <!-- Submit -->
     <div class="field mt-3 text-right">
-      <p-button type="submit" label="Add" [disabled]="amtReceivedFrom.invalid" />
+      <p-button type="submit" label="Add" [disabled]="amtReceivedFrom.invalid" [loading]="loadAdding" />
     </div>
 
   </form>

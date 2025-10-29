@@ -232,7 +232,7 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
         const data = {
           amount: Number(this.amtReceivedFrom.value.amount),
           date_received: date,
-          received_from: this.amtReceivedFrom.value.received_from_user ?? this.amtReceivedFrom.value.received_from_name.trim(),
+          received_from: this.amtReceivedFrom.value.received_from_user?.trim() ? this.amtReceivedFrom.value.received_from_user?.trim() : this.amtReceivedFrom.value.received_from_name.trim(),
         }; 
         this.userService.addReceivingAmt(data)
           .subscribe({
@@ -241,6 +241,7 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
               this.loadAdding = false;
               this.selectedMonths = [this.today.getMonth() + 1];
               this.selectedYear = this.today.getFullYear();
+              this.amtReceivedFrom.reset();
               this.onClearFilter();
             },
             error: (err: any) => {

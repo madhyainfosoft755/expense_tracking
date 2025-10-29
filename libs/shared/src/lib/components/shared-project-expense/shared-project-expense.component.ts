@@ -267,10 +267,12 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
             next: () => {
               this.displayEHEditModal = false;
               this.loadAdding = false;
-              this.amtReceivedFrom.reset();
               this.billImageFile = null;
               this.selectedMonths = [this.today.getMonth() + 1];
               this.selectedYear = this.today.getFullYear();
+              this.amtReceivedFrom.reset();
+              this.billImageFile = null;
+              this.imageError = '';
               this.onClearFilter();
             },
             error: (err: any) => {

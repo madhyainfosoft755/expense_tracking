@@ -189,7 +189,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
                     this.submitted = false;
                     this.loading = false;
                     // this.serverErr = error.error;
-                    this.addMessages({ severity: 'error', content: error?.error?.error, life: 30000 });
+                    this.addMessages({ severity: 'error', content: error?.error?.error ?? 'An error occurred while processing your request.', life: 30000 });
                   }
               }
               );

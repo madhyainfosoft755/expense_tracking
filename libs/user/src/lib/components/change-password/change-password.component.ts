@@ -82,7 +82,7 @@ export class ChangePasswordComponent implements OnInit{
                   error: (error: any) => {
                       this.loading = false;
                       // this.serverErr = error.error;
-                      this.addMessages({ severity: 'error', content: error?.error?.error, life: 30000 });
+                      this.addMessages({ severity: 'error', content: error?.error?.error ?? "An error occurred while processing your request.", life: 30000 });
                   }
               }
               );

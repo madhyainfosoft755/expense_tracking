@@ -1,7 +1,7 @@
 <p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
 <div class="card">
     <div class="font-semibold text-xl mb-4">
-      <p-button *ngIf="userRole === 'USER'" (click)="addAmtReceived()" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
+      <p-button *ngIf="userRole === 'USER'" [disabled]="loadAdding"  (click)="addAmtReceived()" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
       <p-button 
           [icon]="'pi pi-filter'"   
           [severity]="'success'" 
@@ -21,6 +21,7 @@
         [severity]="'success'" 
         (onClick)="exportToCSV()" class="mr-2"/>
     </div>
+    <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()">
     <p-table [value]="data?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false" >
         <ng-template pTemplate="header">
           <tr>
@@ -67,7 +68,107 @@
             <!-- <td>{{ row.timestamp | date:'dd-MM-yyyy' }}</td> -->
           </tr>
         </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td>—</td>
+
+            <td>
+              <!-- Vendor -->
+              <div class="field col-span-12 md:col-span-6">
+                <!-- <label class="block" for="vendor_name">Vendor Name</label> -->
+                <input id="vendor_name" placeholder="Vendor Name" pInputText formControlName="vendor_name" class="w-full" />
+                <small *ngIf="amtReceivedFrom.get('vendor_name')?.invalid && amtReceivedFrom.get('vendor_name')?.touched" class="text-red-500">
+                  Vendor Name is required.
+                </small>
+              </div>
+            </td>
+
+            <td>
+              <!-- Expense Head -->
+              <div class="field col-span-12 md:col-span-6">
+                <!-- <label class="block" for="expense_head">Expense Head</label> -->
+                <p-select 
+                    [options]="expenseHeads" 
+                    formControlName="expense_head"
+                    optionLabel="name"
+                    optionValue="id" 
+                    placeholder="Select" 
+                    appendTo="body" 
+                    class="w-full"
+                    [filter]="true" 
+                    filterBy="name"  />
+
+                <small *ngIf="amtReceivedFrom.get('expense_head')?.invalid && amtReceivedFrom.get('expense_head')?.touched" class="text-red-500">
+                  Expense head is required.
+                </small>
+              </div>
+            </td>
+
+            <td>
+              <!-- description -->
+              <div class="field col-span-12 md:col-span-6">
+                <!-- <label class="block" for="description">Description</label> -->
+                <input id="description" placeholder="Description" pInputText formControlName="description" class="w-full" />
+                <small *ngIf="amtReceivedFrom.get('description')?.invalid && amtReceivedFrom.get('description')?.touched" class="text-red-500">
+                  Name is required and must be under 255 characters.
+                </small>
+              </div>
+            </td>
+            
+            <td>
+              <!-- Amount -->
+              <div class="field col-span-12 md:col-span-6">
+                <!-- <label class="block" for="amount">Amount</label> -->
+                <input id="amount" placeholder="Amount" pInputText formControlName="amount" class="w-full" (input)="checkAmountInput2('amount')" />
+                <small *ngIf="amtReceivedFrom.get('amount')?.invalid && amtReceivedFrom.get('amount')?.touched" class="text-red-500">
+                  Amount is required.
+                </small>
+              </div>
+            </td>
+
+            <td>
+              <!-- Bill Image Upload -->
+              <div class="field col-span-12 md:col-span-6">
+                <!-- <label for="bill_image">Upload Bill Image</label> -->
+                <input
+                  type="file"
+                  id="bill_image"
+                  accept="image/*"
+                  (change)="onFileSelected($event)"
+                  class="w-full border p-2 rounded"
+                />
+                <small *ngIf="imageError" class="text-red-500">{{ imageError }}</small>
+              </div>
+            </td>
+
+            
+            <td>
+              <!-- Date -->
+              <div class="field col-span-12 md:col-span-6">
+                <!-- <label class="block" for="date">Date</label> -->
+                <p-datepicker [maxDate]="today"  id="date" appendTo="body" placeholder="Date" formControlName="date" styleClass="w-full" dateFormat="dd-mm-yy"/>
+                <small *ngIf="amtReceivedFrom.get('date')?.invalid && amtReceivedFrom.get('date')?.touched" class="text-red-500">
+                  Date is required.
+                </small>
+              </div>
+            </td>
+
+
+            <!-- Add button -->
+            <td class="text-center" colspan="4">
+              <p-button
+                icon="pi pi-check"
+                label="Add"
+                [disabled]="amtReceivedFrom.invalid"
+                [loading]="loadAdding"
+                type="submit"
+              ></p-button>
+            </td>
+            
+          </tr>
+        </ng-template>
     </p-table>
+    </form>
     <div class="mt-2 flex justify-end items-center" *ngIf="data?.data?.length > 0 && paginationText">
       <div class="mr-2"> 
         {{ paginationText }}
@@ -156,7 +257,7 @@
 
     <!-- Submit -->
     <div class="field mt-3 text-right">
-      <p-button type="submit" label="Add" [disabled]="amtReceivedFrom.invalid" />
+      <p-button type="submit" label="Add" [disabled]="amtReceivedFrom.invalid" [loading]="loadAdding" />
     </div>
 
   </form>
