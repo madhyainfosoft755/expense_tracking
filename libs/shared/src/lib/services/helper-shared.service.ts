@@ -50,6 +50,15 @@ export class HelperSharedService {
         return updated;
     }
 
+
+    formatDateToDDMMYYYY(date: Date | string): string {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
     removeEmptyTrimmedStrings<T extends Record<string, any>>(obj: T, replaceNull=false, nullDate=false): Partial<T> {
         const result: Partial<T> = {};
         let newObj: any = obj;

@@ -1,29 +1,34 @@
 <p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
 <div class="card">
-    <div class="font-semibold text-xl mb-4">
-      <p-button (click)="addAmtReceived()" [disabled]="loadAdding" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
-      <p-button 
-          [icon]="'pi pi-filter'"   
-          [severity]="'success'" 
-          (onClick)="showFilterDrawer()" class="mr-2"/>
-      <p-button *ngIf="isFilterApplied"
-          [icon]="'pi pi-filter-slash'"   
-          [severity]="'danger'" 
-          (onClick)="onClearFilter()" class="mr-2"/>
-
-      <p-multiselect [options]="months" [(ngModel)]="selectedMonths" optionValue="number" optionLabel="month" placeholder="Select Month" [maxSelectedLabels]="3" (onChange)="onMonthChange($event.value)" />
-      <p-select [options]="years" [(ngModel)]="selectedYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)"/>
-      <!-- <p-multiselect [options]="office_locations" *ngIf="office_locations.length > 0" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" [maxSelectedLabels]="3" (onChange)="onOfficeLocationChange($event.value)"  /> -->
-      
+    <div class="font-semibold text-xl mb-4 flex items-center justify-between items-center">
+      <div>
+        <p-button (click)="addAmtReceived()" [disabled]="loadAdding" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
+        <p-button 
+            [icon]="'pi pi-filter'"   
+            [severity]="'success'" 
+            (onClick)="showFilterDrawer()" class="mr-2"/>
+        <p-button *ngIf="isFilterApplied"
+            [icon]="'pi pi-filter-slash'"   
+            [severity]="'danger'" 
+            (onClick)="onClearFilter()" class="mr-2"/>
+  
+        <p-multiselect [options]="months" [(ngModel)]="selectedMonths" optionValue="number" optionLabel="month" placeholder="Select Month" [maxSelectedLabels]="3" (onChange)="onMonthChange($event.value)" />
+        <p-select [options]="years" [(ngModel)]="selectedYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)"/>
+        <!-- <p-multiselect [options]="office_locations" *ngIf="office_locations.length > 0" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" [maxSelectedLabels]="3" (onChange)="onOfficeLocationChange($event.value)"  /> -->
+      </div>
+      <div *ngIf="data?.data?.total_amount !== undefined" class="float-right align-middle">
+        <p-button (click)="export()" [loading]="loadExport" icon="pi pi-file-excel" [raised]="true" severity="success" class="mr-2" />
+        Total Amount : <strong><span class="text-blue-300">{{data?.data?.total_amount}}</span></strong>
+      </div>
     </div>
     <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()">
-    <p-table [value]="data?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false">
+    <p-table [value]="data?.data?.results" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false">
         <ng-template pTemplate="header">
           <tr>
             <th style="width:45px">SN</th>
             <th>Received From</th>
             <th>Amount</th>
-            <th>Date</th>
+            <th colspan="2">Date</th>
             <!-- <th>Created At</th> -->
           </tr>
         </ng-template>
@@ -32,8 +37,8 @@
             <td>{{ rowIndex+1 }}</td>
             <td>{{ row.received_from_user ? row.received_from_user.username : row.received_from_name }}</td>
             <td>{{ row.cashbook_amount }}</td>
-            <td>{{ row.date_received | date:'dd-MM-yyyy' }}</td>
-            <!-- <td>{{ row.timestamp | date:'dd-MM-yyyy' }}</td> -->
+            <td colspan="2">{{ row.date_received }}</td>
+            <!-- <td>{{ row.timestamp }}</td> -->
           </tr>
         </ng-template>
         <!-- Editable empty row for adding new data -->
@@ -50,7 +55,7 @@
                 placeholder="Enter name"
                 class="w-full"
               />
-              <small *ngIf="amtReceivedFrom.get('received_from_name')?.invalid && amtReceivedFrom.get('received_from_name')?.touched" class="text-red-500">">
+              <small *ngIf="amtReceivedFrom.get('received_from_name')?.invalid && amtReceivedFrom.get('received_from_name')?.touched" class="text-red-500">"
                 Name is required and must be under 255 characters.
               </small>
             </td>

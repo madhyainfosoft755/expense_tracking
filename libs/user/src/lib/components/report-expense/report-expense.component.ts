@@ -70,6 +70,7 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
   disabledDates: Date[] = [];
   billImageFile: File | null = null;
   imageError = '';
+  loadExport = false;
 
 
   constructor(
@@ -183,19 +184,59 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadData(page=1, params={}){
-    this.loading=true;
+  export(){
+    this.loadData(this.page, this.helperSharedService.removeEmptyTrimmedStrings({...this.userFilterForm.value, export: true}, true, true), true);
+  }
+
+  loadData(page=1, params={}, exportData=false){
+    if(exportData){
+      this.loadExport = true;
+    } else {
+      this.loading= true;
+    }
     this.userService.getReportExpense(page, {...params, order_by: '-date', months: this.selectedMonths.join(','), year: this.selectedYear})
       .subscribe({
         next: (data) => {
-          this.data = data;
-          this.paginationText = this.helperSharedService.getPaginationText(data);
-          this.visibleUserFilter = this.noData ?? false;
-          this.noData = false;
+          if(exportData){
+            const resData = structuredClone(data?.results || []);
+            const csvRows: any[] = [];
+            resData.forEach((row: any, index: number) => {
+                const expenseBy = row.expense_expense_by || {};
+                const approvedBy = row.expense_approved_by || {};
+                const expenseHead = row.expense_expense_head || {};
+                const data: any = {
+                  'SN': index + 1,
+                  'Expense Head': expenseHead.name || '',
+                  'Description': row.description || '',
+                  'Amount': row.expense_amount || '',
+                  'Vendor Name': row.vendor_name || '',
+                  'Bill Image URL': row.bill_image || '',
+                  'Expense Date': row.date || '',
+
+                  'Approved By': `${approvedBy.first_name || ''} ${approvedBy.last_name || ''}`.trim(),
+                  'Status': row.status || '',
+                  'Remarks': row.remarks || '',
+                  'Date Approved': row.date_approved || '',
+                };
+                if(this.userRole == "SUPERADMIN"){
+                  data['Expense By (Name)'] = `${expenseBy.first_name || ''} ${expenseBy.last_name || ''}`.trim();
+                }
+                csvRows.push(data);
+            });
+            this.helperSharedService.exportToCSV(csvRows, 'amount_received');
+          }
+          else {
+            this.data = data;
+            this.paginationText = this.helperSharedService.getPaginationText(data);
+            this.visibleUserFilter = this.noData ?? false;
+            this.noData = false;
+          }
           this.loading = false;
+          this.loadExport = false;
         },
         error: (err) => {
           this.loading = false;
+          this.loadExport = false;
         }
     });
   }
@@ -237,9 +278,8 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.loadAdding = true;
-        const date = new Date(this.amtReceivedFrom.value.date);
-        date.setDate(date.getDate() + 1);
-        formData.append('date', date.toISOString());
+        const date = this.helperSharedService.formatDateToDDMMYYYY(this.amtReceivedFrom.value.date);
+        formData.append('date', date);
         this.userService.addReportExpense(formData)
           .subscribe({
             next: () => {

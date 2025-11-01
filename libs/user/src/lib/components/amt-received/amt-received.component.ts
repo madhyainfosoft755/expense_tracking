@@ -44,6 +44,7 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
   amtReceivedFrom: FormGroup;
   loadAdding = false;
   users: any[] = [];
+  loadExport = false;
 
   currentUser$: Observable<any | null>;
   rolesArr: string[] = ['SUPERADMIN', 'ADMIN'];
@@ -193,19 +194,40 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
         });
     }
 
-  loadData(page=1, params={}){
-    this.loading= true;
+  loadData(page=1, params={}, exportData=false){
+    if(exportData){
+      this.loadExport = true;
+    } else {
+      this.loading= true;
+    }
     this.userService.getReveivingAmt(page, {...params, order_by: '-date_received', months: this.selectedMonths.join(','), year: this.selectedYear})
       .subscribe({
         next: (data) => {
-          this.data = data;
-          this.paginationText = this.helperSharedService.getPaginationText(data);
-          this.visibleUserFilter = this.noData ?? false;
-          this.noData = false;
+          if(exportData){
+            const resData = structuredClone(data?.results || []);
+            const csvRows: any[] = [];
+            resData.forEach((row: any, index: number) => {
+                const data: any = {
+                    'SN': index + 1,
+                    'Received From': row.received_from_user ? row.received_from_user.username : row.received_from_name,
+                    'Amount': row.cashbook_amount,
+                    'Date': row.date_received,
+                };
+                csvRows.push(data);
+            });
+            this.helperSharedService.exportToCSV(csvRows, 'amount_received');
+          } else {
+            this.data = data;
+            this.paginationText = this.helperSharedService.getPaginationText(data);
+            this.visibleUserFilter = this.noData ?? false;
+            this.noData = false;
+          }
           this.loading = false;
+          this.loadExport = false;
         },
         error: (err) => {
           this.loading = false;
+          this.loadExport = false;
         }
     });
   }
@@ -227,8 +249,8 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.loadAdding = true;
-        const date = new Date(this.amtReceivedFrom.value.date_received);
-        date.setDate(date.getDate() + 1);
+        const date = this.helperSharedService.formatDateToDDMMYYYY(this.amtReceivedFrom.value.date_received);
+        // date.setDate(date.getDate() + 1);
         const data = {
           amount: Number(this.amtReceivedFrom.value.amount),
           date_received: date,
@@ -272,6 +294,10 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.isFilterApplied = true;
     this.loadData(this.page, this.helperSharedService.removeEmptyTrimmedStrings(this.userFilterForm.value, true, true));
+  }
+
+  export(){
+    this.loadData(this.page, this.helperSharedService.removeEmptyTrimmedStrings({...this.userFilterForm.value, export: true}, true, true), true);
   }
 
   clearAdvanceFilter(){

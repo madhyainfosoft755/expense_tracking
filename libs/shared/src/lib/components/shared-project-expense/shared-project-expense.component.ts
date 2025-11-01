@@ -259,9 +259,8 @@ export class SharedProjectExpenseComponent implements OnInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.loadAdding = true;
-        const date = new Date(this.amtReceivedFrom.value.date);
-        date.setDate(date.getDate() + 1);
-        formData.append('date', date.toISOString());
+        const date = this.helperSharedService.formatDateToDDMMYYYY(this.amtReceivedFrom.value.date);
+        formData.append('date', date);
         this.commonAPIService.addProjectExpense(formData)
           .subscribe({
             next: () => {

@@ -1,38 +1,46 @@
 <p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
 <div class="card">
-    <div class="font-semibold text-xl mb-4">
-      <p-button *ngIf="userRole === 'USER'" [disabled]="loadAdding"  (click)="addAmtReceived()" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
-      <p-button 
-          [icon]="'pi pi-filter'"   
-          [severity]="'success'" 
-          (onClick)="showFilterDrawer()" class="mr-2"/>
-      <p-button *ngIf="isFilterApplied"
-          [icon]="'pi pi-filter-slash'"   
-          [severity]="'danger'" 
-          (onClick)="onClearFilter()" class="mr-2"/>
+    <div class="font-semibold text-xl mb-4 flex justify-between items-center">
+      <div>
+        <p-button *ngIf="userRole === 'USER'" [disabled]="loadAdding"  (click)="addAmtReceived()" icon="pi pi-plus" label="Add New" [raised]="true" severity="info" class="mr-2" />
+        <p-button 
+            [icon]="'pi pi-filter'"   
+            [severity]="'success'" 
+            (onClick)="showFilterDrawer()" class="mr-2"/>
+        <p-button *ngIf="isFilterApplied"
+            [icon]="'pi pi-filter-slash'"   
+            [severity]="'danger'" 
+            (onClick)="onClearFilter()" class="mr-2"/>
+  
+        <p-multiselect [options]="months" [(ngModel)]="selectedMonths" optionValue="number" optionLabel="month" placeholder="Select Month" [maxSelectedLabels]="3" (onChange)="onMonthChange($event.value)" />
+        <p-select [options]="years" [(ngModel)]="selectedYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)"/>
+        <p-select [options]="sites" *ngIf="sites.length > 0 && userRole === 'SUPERADMIN'" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" (onChange)="onOfficeLocationChange($event.value)"  class="mr-2" />
+      </div>
 
-      <p-multiselect [options]="months" [(ngModel)]="selectedMonths" optionValue="number" optionLabel="month" placeholder="Select Month" [maxSelectedLabels]="3" (onChange)="onMonthChange($event.value)" />
-      <p-select [options]="years" [(ngModel)]="selectedYear" optionLabel="name" optionValue="name" placeholder="Select Year" class="w-full md:w-56" (onChange)="onYearChange($event.value)"/>
-      <p-select [options]="sites" *ngIf="sites.length > 0 && userRole === 'SUPERADMIN'" [(ngModel)]="selectedOfficeLocations" optionValue="id" optionLabel="name" placeholder="Select Site" (onChange)="onOfficeLocationChange($event.value)"  class="mr-2" />
+      <div *ngIf="data?.data?.total_amount !== undefined" class="float-right align-middle">
+        <p-button
+          [loading]="loadingExport"
+          [icon]="'pi pi-file-excel'"   
+          [severity]="'success'" 
+          (onClick)="exportToCSV()" class="mr-2"/>
+        Total Amount : <strong><span class="text-blue-300" title="Pending: {{ data?.data?.total_summary?.pending ?? 0 }}, 
+         Approved: {{ data?.data?.total_summary?.approved ?? 0 }}, 
+         Rejected: {{ data?.data?.total_summary?.rejected ?? 0 }}">{{data?.data?.total_amount}}</span></strong>
+      </div>
       
-      <p-button
-        [loading]="loadingExport"
-        [icon]="'pi pi-file-excel'"   
-        [severity]="'success'" 
-        (onClick)="exportToCSV()" class="mr-2"/>
     </div>
     <form [formGroup]="amtReceivedFrom" (ngSubmit)="onSubmit()">
-    <p-table [value]="data?.data" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false" >
+    <p-table [value]="data?.data?.results" showGridlines stripedRows size="small" [loading]="loading" [paginator]="false" >
         <ng-template pTemplate="header">
           <tr>
             <th style="width:45px">SN</th>
             <th *ngIf="userRole !== 'USER'">Expense By</th>
-            <th>Vendor Name</th>
-            <th>Expense Head</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Bill</th>
-            <th>Date</th>
+            <th style="min-width:150px">Vendor Name</th>
+            <th style="min-width:150px">Expense Head</th>
+            <th style="min-width:150px">Description</th>
+            <th style="min-width:150px">Amount</th>
+            <th style="min-width:150px">Bill</th>
+            <th style="min-width:150px">Date</th>
             <th>Approved By</th>
             <th>Status</th>
             <th>Remarks</th>
@@ -60,16 +68,16 @@
                 width="30"
               ></p-image>
             </td>
-            <td>{{ row.date | date:'dd-MM-yyyy' }}</td>
+            <td>{{ row.date }}</td>
             <td>{{ row.expense_approved_by?.first_name }} {{ row.expense_approved_by?.last_name }}</td>
             <td>{{ row.status }}</td>
             <td>{{ row.remarks }}</td>
-            <td>{{ row.date_approved | date:'dd-MM-yyyy' }}</td>
+            <td>{{ row.date_approved }}</td>
             <!-- <td>{{ row.timestamp | date:'dd-MM-yyyy' }}</td> -->
           </tr>
         </ng-template>
         <ng-template pTemplate="footer">
-          <tr>
+          <tr *ngIf="userRole === 'USER'">
             <td>—</td>
 
             <td>
