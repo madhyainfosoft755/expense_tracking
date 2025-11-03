@@ -176,7 +176,7 @@ export class SharedCashbookComponent implements OnInit {
           expenseAmt: exp?.expense_amount || null,
           expenseHead: exp?.expense_expense_head.name || null,
           descriptions: exp?.description || null,
-          approvedBy: exp?.expense_approved_by?.first_name || null,
+          approvedBy: exp?.expense_approved_by ? (exp?.expense_approved_by?.first_name || '') + ' ' + (exp?.expense_approved_by?.last_name || '') : null,
           remarks: exp?.remarks || null,
           vendorName: exp?.expense_vendor_name || null,
           approvedDate: exp?.date_approved || null,
