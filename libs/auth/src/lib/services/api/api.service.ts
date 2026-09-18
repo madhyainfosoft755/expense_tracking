@@ -8,6 +8,7 @@ export class ApiService {
   private readonly http = inject(HttpClient);
    headers: HttpHeaders;
    apiURL = 'http://127.0.0.1:8000/api/';
+  //  apiURL = 'https://mydailyapps.in/expense-tracker/api/';
 
    setParams(data: any): HttpParams {
     let httpParams = new HttpParams();

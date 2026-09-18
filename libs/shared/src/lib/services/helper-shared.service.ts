@@ -9,6 +9,17 @@ import { saveAs } from 'file-saver';
 export class HelperSharedService {
     constructor(private datePipe: DatePipe) {}
 
+    getYearsFrom(startYear: number): { name: number }[] {
+        const currentYear = new Date().getFullYear();
+
+        return Array.from(
+            { length: currentYear - startYear + 1 },
+            (_, index) => ({
+            name: startYear + index,
+            })
+        );
+    }
+
     getAllMonths(options?: { padZero?: boolean }): { number: number | string, month: string }[] {
         const monthNames = [
             'January', 'February', 'March', 'April', 'May', 'June',

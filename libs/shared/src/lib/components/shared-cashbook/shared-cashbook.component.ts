@@ -49,6 +49,7 @@ export class SharedCashbookComponent implements OnInit {
       private store: Store,
       private helperSharedService: HelperSharedService
     ) {
+      this.years = this.helperSharedService.getYearsFrom(2025);
       this.currentUser$ = this.store.select(selectUser);
       // this.amtReceivedFrom = this.fb.group({
       //   date: [null, [Validators.required]],
@@ -67,7 +68,6 @@ export class SharedCashbookComponent implements OnInit {
     this.months = this.helperSharedService.getAllMonths();
     this.selectedMonth = this.today.getMonth() + 1;
     this.selectedYear = this.today.getFullYear();
-    this.years = [{name: this.selectedYear}];
 
     this.currentUser$.subscribe(user => {
       if (user) {

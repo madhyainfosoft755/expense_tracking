@@ -48,15 +48,11 @@ export class ReimbursementSummaryComponent implements OnInit {
      }
 
     ngOnInit(): void {
+        this.years = this.helperSharedService.getYearsFrom(2025);
         this.months = this.helperSharedService.getAllMonths();
 
         // Fallback if parent didn't pass currentYear or months
         const today = new Date();
-        // if (!this.currentYear) {
-        //     this.currentYear = today.getFullYear();
-            // this.years = [{name: this.currentYear-2}, {name: this.currentYear-1}, {name: this.currentYear}];
-            this.years = [{name: this.currentYear}];
-        // }
 
         if (!this.selectedMonthCashBook || this.selectedMonthCashBook.length === 0) {
             const currentMonth = today.getMonth() + 1;

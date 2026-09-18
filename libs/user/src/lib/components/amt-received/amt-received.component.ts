@@ -76,6 +76,7 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
     private store: Store,
     private helperSharedService: HelperSharedService
   ) {
+    this.years = this.helperSharedService.getYearsFrom(2025);
     this.amtReceivedFrom = this.fb.group({
       date_received: [this.today, [Validators.required]],
       amount: ['', [Validators.required, Validators.min(1)]],
@@ -122,7 +123,6 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
     this.months = this.helperSharedService.getAllMonths();
     this.selectedMonths = [this.today.getMonth() + 1];
     this.selectedYear = this.today.getFullYear();
-    this.years = [{name: this.selectedYear}];
 
     this.generateDisabledDates();
 
@@ -261,8 +261,8 @@ export class AmtReceivedComponent implements OnInit, OnDestroy {
             next: () => {
               this.displayEHEditModal = false;
               this.loadAdding = false;
-              this.selectedMonths = [this.today.getMonth() + 1];
-              this.selectedYear = this.today.getFullYear();
+              // this.selectedMonths = [this.today.getMonth() + 1];
+              // this.selectedYear = this.today.getFullYear();
               this.amtReceivedFrom.reset();
               this.onClearFilter();
             },

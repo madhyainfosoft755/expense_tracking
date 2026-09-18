@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -72,6 +72,12 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
   imageError = '';
   loadExport = false;
 
+  @ViewChild('billImageInput')
+  billImageInput!: ElementRef<HTMLInputElement>;
+
+  @ViewChild('billImageInput1')
+  billImageInput1!: ElementRef<HTMLInputElement>;
+
 
   constructor(
     private userService: UserService,
@@ -80,6 +86,7 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
     private store: Store,
     private helperSharedService: HelperSharedService
   ) {
+    this.years = this.helperSharedService.getYearsFrom(2025);
     this.amtReceivedFrom = this.fb.group({
       date: [this.today, [Validators.required]],
       amount: ['', [Validators.required, Validators.min(1)]],
@@ -103,6 +110,11 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
     this.initialAdvSearchValues = this.userFilterForm.value;
   }
 
+  clearFileInput(): void {
+    this.billImageInput.nativeElement.value = '';
+    this.billImageInput1.nativeElement.value = '';
+  }
+
   ngOnInit(): void {
     this.breadcrumbItems = [
       { label: 'Dashboard', routerLink: '/user' },
@@ -111,7 +123,6 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
     this.months = this.helperSharedService.getAllMonths();
     this.selectedMonths = [this.today.getMonth() + 1];
     this.selectedYear = this.today.getFullYear();
-    this.years = [{name: this.selectedYear}];
     this.generateDisabledDates();
 
     this.currentUser$.subscribe(user => {
@@ -286,12 +297,14 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
               this.displayEHEditModal = false;
               this.loadAdding = false;
               this.billImageFile = null;
-              this.selectedMonths = [this.today.getMonth() + 1];
-              this.selectedYear = this.today.getFullYear();
+              // this.selectedMonths = [this.today.getMonth() + 1];
+              // this.selectedYear = this.today.getFullYear();
               this.amtReceivedFrom.reset();
               this.billImageFile = null;
               this.imageError = '';
+              this.clearFileInput();
               this.onClearFilter();
+              
             },
             error: (err: any) => {
               this.loadAdding = false;
@@ -341,6 +354,9 @@ export class ReportExpenseComponent implements OnInit, OnDestroy {
   }
 
   cancelEHEditModal(){
+    this.clearFileInput();
+    this.billImageFile = null;
+    this.imageError = '';
     this.displayEHEditModal = false;
   }
 

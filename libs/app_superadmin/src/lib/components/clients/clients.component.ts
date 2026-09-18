@@ -60,6 +60,7 @@ export class ClientComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.serverUrl = 'http://127.0.0.1:8000/api/'.slice(0, -5);
+    // this.serverUrl = 'https://mydailyapps.in/expense-tracker/api/'.slice(0, -5);
     this.clientForm = this.fb.group({
       client_name: ['', [Validators.required, Validators.maxLength(255)]],
       company_name: ['', [Validators.required, Validators.maxLength(255)]],

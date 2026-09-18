@@ -24,6 +24,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
   const http = inject(HttpClient); // Inject HttpClient
   const store = inject(Store);
   const baseUrl = 'http://127.0.0.1:8000/api/';
+  // const baseUrl = 'https://mydailyapps.in/expense-tracker/api/';
   const authService = inject(AuthService); // Inject AuthService
 
   return combineLatest([

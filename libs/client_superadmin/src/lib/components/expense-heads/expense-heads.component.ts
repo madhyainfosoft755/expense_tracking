@@ -72,6 +72,7 @@ export class ExpenseHeadsComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.serverUrl = 'http://127.0.0.1:8000/api/'.slice(0, -5);
+    // this.serverUrl = 'https://mydailyapps.in/expense-tracker/api/'.slice(0, -5);
     this.expenseHeadForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
       office_locations: ['', [Validators.required]],
